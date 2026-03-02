@@ -20,6 +20,14 @@ The four recommendation values map directly to product workflow outcomes:
 - park: put in backlog, research higher-priority opportunities first
 - need_more_evidence: design a follow-up study
 
+New fields (Synthesis.txt enrichment):
+- contradictions_and_open_questions: where users disagreed; what this research can't yet answer
+- what_not_to_do: directions invalidated by the research
+- next_steps_immediate: actions to take now with suggested owners
+- next_steps_short_term: next-quarter validation and exploration
+- next_steps_long_term: bigger strategic opportunities
+- segment_specific_insights: how findings differ between participant segments
+
 Known failure modes:
 - LLM sometimes writes "pursue with caveats" or similar hedged variants
   instead of the four valid values. The prompt is explicit that only the
@@ -47,7 +55,13 @@ class DecisionNarrative(BaseModel):
     evidence_summary: str  # 2-3 paragraph narrative of key findings
     descoped_items: str  # Assumptions not addressed and why they matter
     remaining_risks: str  # What could still be wrong, despite the evidence
-    next_steps: str  # Recommended follow-up research or experiments
+    next_steps: str  # Legacy field — kept for backward compat with loaded fixtures
+    contradictions_and_open_questions: str  # Where users disagreed; what this research can't yet answer
+    what_not_to_do: str  # Ideas or directions invalidated by the research
+    next_steps_immediate: str  # Actions to take now (with suggested owners)
+    next_steps_short_term: str  # Next-quarter validation, exploration, or experiments
+    next_steps_long_term: str  # Bigger strategic opportunities to investigate
+    segment_specific_insights: str  # How findings differ between participant segments
 
 
 def get_decision_record_prompt(
@@ -92,7 +106,7 @@ RECOMMENDATION — choose exactly one:
 - park: Insufficient evidence to decide, OR the opportunity is lower priority than the evidence suggests compared to alternatives.
 - need_more_evidence: The signal is promising but the research is too thin or contradictory to act on. More sessions needed.
 
-Use EXACTLY one of these four values — no modifications, no "pursue with caveats", no hybrid answers.
+Use EXACTLY one of these four values. No modifications, no "pursue with caveats", no hybrid answers.
 
 SECTION GUIDANCE:
 
@@ -114,16 +128,45 @@ What could still be wrong, even if you recommend pursue or pivot?
 What would change your recommendation if it turned out to be true?
 Include both evidence-based risks and unaddressed assumptions.
 
-next_steps (bullet points or short paragraphs):
-Concrete recommended actions. May include: follow-up research questions, experiments to run,
-stakeholder reviews needed, or assumptions to test before committing to delivery.
+next_steps (2-3 sentence summary — legacy field):
+A short summary of the most urgent recommended actions.
+
+CONTRADICTIONS AND OPEN QUESTIONS (1-2 paragraphs):
+Where did participants disagree with each other or give contradictory signals?
+What questions does this research raise that it cannot yet answer?
+What would a follow-up study need to address?
+
+WHAT NOT TO DO (2-4 bullet points):
+What product directions, features, or assumptions did this research actively invalidate?
+These are ideas the team should deprioritise or explicitly shelve based on what you learned.
+
+NEXT STEPS — IMMEDIATE (bullet points, do now):
+Specific actions with suggested owners for the next 1-2 weeks.
+Example: "PM: present findings to stakeholders", "Design: sketch 3 concepts for user testing"
+
+NEXT STEPS — SHORT TERM (bullet points, next quarter):
+Research to validate, prototypes to test, or features to explore in the next quarter.
+
+NEXT STEPS — LONG TERM (1-2 sentences):
+Bigger strategic opportunities to investigate once the immediate direction is confirmed.
+
+SEGMENT-SPECIFIC INSIGHTS (1-2 paragraphs):
+How do the findings differ between participant segments (by role, company size, or behaviour)?
+Which segment is most affected? Where do segments agree vs. disagree?
+If there is no meaningful segment variation in the data, say so briefly.
 
 Respond with a JSON object matching this schema:
 {{
-  "question": "string — the decision question",
+  "question": "string",
   "recommendation": "pursue | pivot | park | need_more_evidence",
   "evidence_summary": "string — 2-3 paragraph synthesised narrative",
   "descoped_items": "string — gaps in research coverage and why they matter",
   "remaining_risks": "string — what could still invalidate this direction",
-  "next_steps": "string — recommended follow-up actions"
+  "next_steps": "string — short summary of most important actions",
+  "contradictions_and_open_questions": "string — where users disagreed and open questions",
+  "what_not_to_do": "string — directions invalidated by this research",
+  "next_steps_immediate": "string — actions to take now with suggested owners",
+  "next_steps_short_term": "string — next quarter validation and exploration",
+  "next_steps_long_term": "string — bigger strategic opportunities",
+  "segment_specific_insights": "string — how findings differ between participant segments"
 }}"""

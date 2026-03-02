@@ -69,6 +69,12 @@ def decision_record_node(state: StudyState) -> dict:
         descoped_items=narrative.descoped_items,
         remaining_risks=narrative.remaining_risks,
         next_steps=narrative.next_steps,
+        contradictions_and_open_questions=narrative.contradictions_and_open_questions,
+        what_not_to_do=narrative.what_not_to_do,
+        next_steps_immediate=narrative.next_steps_immediate,
+        next_steps_short_term=narrative.next_steps_short_term,
+        next_steps_long_term=narrative.next_steps_long_term,
+        segment_specific_insights=narrative.segment_specific_insights,
     )
 
     return {"decision_record": record, "status": "decided"}

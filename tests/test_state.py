@@ -12,7 +12,6 @@ from src.state import (
     Assumption,
     DecisionRecord,
     Insight,
-    Observation,
     Script,
     ScriptQuestion,
     Session,

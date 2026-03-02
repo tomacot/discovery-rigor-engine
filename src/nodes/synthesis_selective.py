@@ -39,6 +39,14 @@ def _draft_to_insight(
         implication=draft.implication,
         assumption_id=draft.assumption_id,
         assumption_status=draft.assumption_status,
+        supporting_quotes=draft.supporting_quotes,
+        frequency=draft.frequency,
+        why_it_matters=draft.why_it_matters,
+        user_segments_affected=draft.user_segments_affected,
+        current_workarounds=draft.current_workarounds,
+        potential_solutions=draft.potential_solutions,
+        actionability=draft.actionability,
+        priority=draft.priority,
     )
 
 

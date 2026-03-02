@@ -1,0 +1,128 @@
+{
+  "study_id": "campaign-pacing-optimisation",
+  "hypothesis": "We believe performance advertisers lose 15-20% campaign efficiency to manual pacing adjustments because DSPs don't expose real-time budget reallocation controls designed for non-specialist users, resulting in systematic overspend in low-performing windows and underspend in high-converting windows.",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "Manual pacing adjustments are a regular, time-consuming part of the campaign management workflow",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A2",
+      "statement": "Budget waste from poor pacing is visible and measurable to practitioners",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A3",
+      "statement": "Existing DSP pacing controls are too crude or too complex for mid-market teams to use effectively",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A4",
+      "statement": "Teams have enough data to make intelligent real-time budget reallocation decisions",
+      "risk_lens": "usability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A5",
+      "statement": "Users can interpret real-time pacing alerts and act on them without specialist support",
+      "risk_lens": "usability",
+      "importance": 3,
+      "evidence_level": 2,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A6",
+      "statement": "Platform APIs expose real-time spend and performance data at the granularity needed for automated pacing",
+      "risk_lens": "feasibility",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A7",
+      "statement": "Automated budget changes via API won't trigger ad account review flags or platform restrictions",
+      "risk_lens": "feasibility",
+      "importance": 4,
+      "evidence_level": 1,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A8",
+      "statement": "The efficiency gain from better pacing is large enough to justify a separate tool subscription",
+      "risk_lens": "viability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    }
+  ],
+  "scripts": [
+    {
+      "id": "S1",
+      "study_id": "campaign-pacing-optimisation",
+      "raw_text": "1. Describe how you currently manage budget pacing across your campaigns.\n2. How much time per week do you spend making manual pacing adjustments?\n3. Don't you think manual pacing is one of the biggest sources of wasted ad spend?\n4. What happens when a campaign underpaces — do you have a standard response process?\n5. Have you ever calculated how much budget waste comes from poor pacing? What did you find?\n6. Would you trust an automated system to adjust your campaign budgets in real-time without your approval?\n7. What would have to happen for you to feel confident in an automated pacing tool?\n8. How do the pacing controls in your current DSP fall short of what you actually need?\n9. If you had perfect pacing, what other problems would still be holding back your campaign performance?\n10. What's the worst pacing disaster you've had to clean up? What caused it?",
+      "clean_text": "",
+      "bias_score": 0.0,
+      "questions": []
+    }
+  ],
+  "sessions": [
+    {
+      "id": "SES1",
+      "study_id": "campaign-pacing-optimisation",
+      "participant_id": "P1",
+      "raw_notes": "P1: Senior Campaign Manager, travel brand, ~180 employees. Experienced, very hands-on.\n\n- Manages 20-30 live campaigns simultaneously across DV360, Meta, and The Trade Desk.\n- Pacing check frequency: 'I check pacing at 9am, 1pm, and 4pm every day. It's part of my routine.'\n- Pain: 'On Friday afternoons when budgets need to clear by end of day, it gets really stressful. You're basically refreshing dashboards and adjusting bids every 30 minutes.'\n- Waste estimate: 'If I had to guess, maybe 10-15% of budget goes to the wrong place because of pacing. We front-load when we should back-load and vice versa.'\n- Current workaround: 'I use Google Sheets with API pulls to track cumulative spend vs. ideal burn curve. It's taken me 2 years to build and it's fragile.'\n- Automation trust: 'I'd want human oversight. Not fully automated. A system that recommends changes and I approve them — that I'd use.'\n- Platform gap: 'DV360 has flight-level pacing but it's all or nothing. Either the platform controls pacing or I do. There's no middle ground.'"
+    },
+    {
+      "id": "SES2",
+      "study_id": "campaign-pacing-optimisation",
+      "participant_id": "P2",
+      "raw_notes": "P2: Performance Marketing Manager, fintech startup, ~60 employees. Sceptical about the pain.\n\nPushed back on the core hypothesis early: 'Our campaigns are relatively small — £50k/month total across Meta and Google. At this scale, pacing is genuinely not a big deal. I check it maybe once a day, make a small adjustment every couple of weeks. It's not a significant time sink.'\n\nIdentified a different primary pain: 'For us the bigger issues are audience saturation and creative fatigue. I burn through an audience in about 3 weeks and then performance drops off a cliff. That's where I spend my mental energy, not on pacing.'\n\nDid acknowledge one seasonal exception: 'Black Friday is a completely different story. That week I'm checking pacing every 2 hours, adjusting bids manually, panicking. So the pain is real — it's just concentrated into a few days per year, not a weekly problem.'\n\nRelied heavily on platform automation: 'Meta's own campaign budget optimisation is actually pretty good at this spend level. I set a daily budget, let it run, and it distributes sensibly. For £50k/month I'm not sure a pacing tool would add much on top of what Meta already does.'\n\nOffered useful scale threshold insight: 'I do think if we scaled to £200k/month across 4-5 platforms, pacing would become a real operational problem. Right now it's not in my top 10. Come back to me in 18 months.'\n\nWould not pay: 'My discretionary tool budget is tiny. I'd rather spend it on creative production than on infrastructure for a problem I don't really have yet.'"
+    },
+    {
+      "id": "SES3",
+      "study_id": "campaign-pacing-optimisation",
+      "participant_id": "P3",
+      "raw_notes": "P3: Programmatic Trading Specialist, agency, manages multiple mid-market clients.\n\n- Manages £800k/month across 15 clients on DV360 and TTD.\n- 'Pacing is genuinely my biggest operational headache. I have to context-switch between clients constantly.'\n- Key insight: 'The worst thing is when a campaign underpaces for two weeks and then the client asks why we didn't spend their budget. There's no good answer.'\n- Current tools: 'Sizmek had a pacing tool. DSPs have basic controls. Nothing stitches it together across platforms.'\n- Automation view: 'I'd automate straightforward pacing adjustments — change flight end date, extend budget on overperforming campaigns. But anything involving bid changes needs human approval.'\n- 'The real problem is cross-platform pacing. If DV360 underpaces, I want to shift that budget to TTD automatically. That's not possible today.'\n- Would pay: 'Absolutely. If this saved my team 10 hours a week I'd pay £2,000/month.'\n- Feasibility concern: 'I've heard platform APIs have rate limits that make real-time adjustments difficult. Have you tested this?'"
+    },
+    {
+      "id": "SES4",
+      "study_id": "campaign-pacing-optimisation",
+      "participant_id": "P4",
+      "raw_notes": "P4: VP Digital, consumer goods brand, ~400 employees. Strategic perspective, less hands-on.\n\n- Team does the day-to-day pacing. Her view is high-level.\n- 'My team tells me pacing is a pain. But honestly it's not a reason we lose clients or miss targets — it's just operational overhead.'\n- Interesting perspective: 'The real cost isn't wasted budget. It's the opportunity cost of my team's attention. They should be spending time on strategy, not refreshing dashboards.'\n- Has tried automation before: 'We piloted an automated bidding tool two years ago. It worked but we had to turn it off after it spent £20k in 3 hours when a campaign settings changed unexpectedly.'\n- Trust barrier: 'Any automated budget tool needs hard budget caps and kill switches. Non-negotiable. The agency panic story is the horror story every CMO has heard.'\n- Would buy: 'Yes, but procurement needs audit trails and explainability. Show me why the system made each decision.'"
+    },
+    {
+      "id": "SES5",
+      "study_id": "campaign-pacing-optimisation",
+      "participant_id": "P5",
+      "raw_notes": "P5: Independent programmatic consultant. Challenges both the problem framing and the solution.\n\n- 'Pacing problems are real but they're often symptoms of bad campaign setup, not bad tools.'\n- 'If a campaign consistently underpaces, the problem is usually the targeting is too narrow, the bid is too low, or the creative is getting rejected. Fixing pacing automation doesn't fix those.'\n- 'Platform algorithms are actually getting better at pacing. Meta's campaign budget optimisation is legitimately good. DV360 improved their algorithm last year.'\n- Agrees on cross-platform gap: 'The place where automation genuinely helps is across platforms. No single platform can optimise for you across all of them. That's a real gap.'\n- 'I'd be cautious about building autonomous budget changes into this. Every programmatic trader I know has a horror story about automated systems spending uncapped in a few minutes.'\n- 'The product I'd want is anomaly detection and alerts, not automated changes. Tell me when something is going wrong. Let me decide what to do about it.'"
+    }
+  ]
+}

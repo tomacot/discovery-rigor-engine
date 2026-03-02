@@ -1,0 +1,138 @@
+{
+  "study_id": "attribution-modelling-gaps",
+  "hypothesis": "We believe mid-market brands systematically over-invest in last-click search and under-invest in awareness channels because they lack accessible multi-touch attribution tooling, leading to a measurable long-term drag on customer acquisition growth.",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "Mid-market brands predominantly use last-click or last-touch attribution models",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A2",
+      "statement": "Marketers suspect their attribution model is misleading them but lack tools to prove it",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A3",
+      "statement": "This leads to measurable misallocation of budget away from awareness channels",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A4",
+      "statement": "Existing attribution tools (GA4, Rockerbox, Triple Whale) don't solve the problem for mid-market",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A5",
+      "statement": "Teams can act on multi-touch attribution data without a dedicated analyst interpreting it",
+      "risk_lens": "usability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A6",
+      "statement": "Mid-market brands have sufficient data volume to make multi-touch models statistically reliable",
+      "risk_lens": "feasibility",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A7",
+      "statement": "Cross-channel data can be joined reliably given current cookie and privacy constraints",
+      "risk_lens": "feasibility",
+      "importance": 5,
+      "evidence_level": 1,
+      "risk_score": 25.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A8",
+      "statement": "Attribution improvement generates enough measurable ROAS lift to justify tool cost",
+      "risk_lens": "viability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A9",
+      "statement": "Marketers have authority to change budget allocation based on attribution model outputs",
+      "risk_lens": "viability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    }
+  ],
+  "scripts": [
+    {
+      "id": "S1",
+      "study_id": "attribution-modelling-gaps",
+      "raw_text": "1. Walk me through how your team currently measures campaign performance across channels.\n2. Don't you think last-click attribution is fundamentally broken for modern multi-channel campaigns?\n3. How do you decide which channels are working and which aren't?\n4. Have you ever questioned whether your attribution model was giving you a misleading picture?\n5. Would you switch your whole budget to awareness channels if you had better attribution data?\n6. How do you handle the attribution gap caused by iOS privacy changes?\n7. Surely Google Analytics is good enough for most attribution needs — why would you need more?\n8. What would your ideal attribution model look like if you could design it yourself?\n9. Do you think your current attribution model causes you to overspend on search?\n10. How often do you change channel budget allocations and what drives those decisions?",
+      "clean_text": "",
+      "bias_score": 0.0,
+      "questions": []
+    }
+  ],
+  "sessions": [
+    {
+      "id": "SES1",
+      "study_id": "attribution-modelling-gaps",
+      "participant_id": "P1",
+      "raw_notes": "P1: Head of Growth, DTC fashion brand, ~150 employees. 4 years in role.\n\n- Attribution stack: GA4 + Meta's native attribution + manually reconciled in Google Sheets. 'It's a mess.'\n- Knows last-click is wrong: 'Of course last-click overstates search. We all know that. But it's what the CFO understands and it's what the budgets are built around.'\n- Has tried to make the case for awareness investment but CFO wants proof: 'He says, show me the data. And the honest answer is I can't, because the data doesn't exist at a level he'd accept.'\n- Has looked at Triple Whale but found it too DTC-focused: 'It's built for Shopify brands with high transaction volume. Our AOV is £800. Different model.'\n- Pain: 'I spend 3 days every month reconciling attribution data across platforms. It's one of the worst parts of my job.'\n- Would pay: 'If something could show my CFO why we should invest more in YouTube, I'd pay a lot for that.'\n- Data concern: 'iOS killed our Meta attribution. We're working on modelled conversions but we don't fully trust them yet.'"
+    },
+    {
+      "id": "SES2",
+      "study_id": "attribution-modelling-gaps",
+      "participant_id": "P2",
+      "raw_notes": "P2: Digital Marketing Director, B2B software company, ~200 employees. Contrarian view.\n\n- 'Attribution in B2B is completely different. Our sales cycle is 6-18 months. No attribution model handles that well.'\n- Uses HubSpot for attribution across 12 touchpoints. 'It shows multi-touch but I don't fully trust it because of the offline touchpoints we can't track.'\n- Challenges core hypothesis: 'We actually over-invest in awareness because the founder loves brand. The problem for us is proving awareness doesn't work, not that it does.'\n- Does acknowledge the problem exists for some: 'I can see how a B2C brand with a 7-day purchase window would have this problem, but for us it's different.'\n- Not interested in more attribution tooling: 'I have too many dashboards already. I need fewer tools, not more.'\n- Budget: 'Would consider it if it replaced two existing tools rather than adding a third subscription.'"
+    },
+    {
+      "id": "SES3",
+      "study_id": "attribution-modelling-gaps",
+      "participant_id": "P3",
+      "raw_notes": "P3: Performance Marketing Manager, e-commerce, ~90 employees. High pain, junior role.\n\n- 'My whole performance review is based on ROAS. Last-click ROAS. So even if I know it's not the right metric, I optimise for it because that's what I'm measured on.'\n- This was a key insight: incentive misalignment driving attribution model entrenchment.\n- Does use Northbeam but found the onboarding difficult: 'It took 6 weeks to set up properly and I'm still not sure the data is right.'\n- Pain: 'We turn off TV and podcast spend every quarter because we can't attribute it. But then our brand search volume drops and everyone panics. It's obviously connected but we can't prove it.'\n- Would change allocation with better data: 'Yes. I'm 80% sure we're overspending on Google Shopping and underspending on Meta Prospecting. But I need the numbers to back that up.'\n- Data volume concern: 'We do about 300 transactions a month. Is that enough for the model to be reliable?'"
+    },
+    {
+      "id": "SES4",
+      "study_id": "attribution-modelling-gaps",
+      "participant_id": "P4",
+      "raw_notes": "P4: CMO, retail brand, ~280 employees. Strategic, high influence.\n\n- Has tried three attribution tools in 3 years: 'We've had Rockerbox, Ruler Analytics, and Wicked Reports. None of them lasted more than a year.'\n- Core problem: 'The tools give you the data but then you're on your own to know what to do with it. There's no translation layer from attribution insight to budget decision.'\n- 'The real gap isn't the data. It's the decision support. Tell me what to do, not just what happened.'\n- Interesting framing: 'Attribution is solved for enterprise. The question is whether it's solvable for mid-market at a price that makes sense.'\n- Authority: 'I own the budget. If the tool tells me to shift 20% from search to YouTube I can do that.'\n- Would pay: '$1,500/month if it replaced our analytics subscription and gave me clear budget recommendations.'\n- Privacy concern: 'Post-GDPR, first-party data strategy is non-negotiable. I won't use a tool that relies on third-party cookies or re-identification tricks.'"
+    },
+    {
+      "id": "SES5",
+      "study_id": "attribution-modelling-gaps",
+      "participant_id": "P5",
+      "raw_notes": "P5: Media planning consultant, works with 8 mid-market clients. Challenging but constructive.\n\n- 'Attribution is the eternal problem. I've been in this industry for 12 years and it's never been solved for this tier of advertiser.'\n- Sceptical about the hypothesis framing: 'You're assuming the problem is tooling. Most of my clients don't have an attribution problem — they have a data quality problem. Garbage in, garbage out.'\n- 'Before you sell attribution tools, you need to fix the event tracking. Half my clients' GA4 setups are broken. The data they're feeding into attribution is unreliable.'\n- Confirms the budget allocation problem: 'I see this constantly. Clients see search ROAS of 4x and awareness ROAS of 0.5x and cut awareness. Then search volume drops 6 months later and they don't connect the dots.'\n- 'The product that solves this isn't more data — it's a recommendation engine that accounts for the delay between awareness investment and conversion.'\n- 'Statistical significance is a real issue at mid-market scale. 300 conversions a month is not enough for holdout tests.'\n- Would recommend to clients: 'Only if it worked out of the box. Implementation complexity is a deal-breaker at this tier.'"
+    }
+  ]
+}

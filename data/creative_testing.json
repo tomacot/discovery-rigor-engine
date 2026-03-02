@@ -1,0 +1,128 @@
+{
+  "study_id": "creative-testing-scale",
+  "hypothesis": "We believe mid-market advertisers run fewer than 3 creative variants per campaign because the overhead of setting up, running, and analysing A/B tests across multiple platforms outweighs the perceived benefit when teams lack dedicated creative ops support.",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "Mid-market teams run fewer creative variants than they believe would be optimal",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A2",
+      "statement": "Setup and management overhead — not creative production — is the primary constraint on testing volume",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A3",
+      "statement": "Teams find it difficult to interpret cross-platform creative test results without a unified view",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A4",
+      "statement": "More creative variants would meaningfully improve campaign ROAS for these teams",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A5",
+      "statement": "Teams can correctly interpret statistical significance in test results without specialist support",
+      "risk_lens": "usability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A6",
+      "statement": "Campaign traffic volume is sufficient for tests to reach significance within a typical campaign window",
+      "risk_lens": "feasibility",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A7",
+      "statement": "Platform creative test APIs allow third-party tools to set up and read results programmatically",
+      "risk_lens": "feasibility",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A8",
+      "statement": "Advertisers have budget to produce more creative variants if the management overhead is reduced",
+      "risk_lens": "viability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    }
+  ],
+  "scripts": [
+    {
+      "id": "S1",
+      "study_id": "creative-testing-scale",
+      "raw_text": "1. Tell me about your current creative testing process — what does a typical A/B test look like for you?\n2. How many creative variants do you typically run per campaign?\n3. Don't you think most advertisers are far too conservative with their creative testing?\n4. What's the biggest blocker to running more creative experiments?\n5. How do you decide when a test has enough data to call a winner?\n6. Have you ever found a creative insight from testing that genuinely changed your approach?\n7. Would an automated creative testing tool help you run 5x more experiments?\n8. How do you currently track creative performance across different platforms?\n9. What happens to the knowledge you gain from a creative test — how do you capture it?\n10. If you had unlimited creative production budget, would testing volume actually increase?",
+      "clean_text": "",
+      "bias_score": 0.0,
+      "questions": []
+    }
+  ],
+  "sessions": [
+    {
+      "id": "SES1",
+      "study_id": "creative-testing-scale",
+      "participant_id": "P1",
+      "raw_notes": "P1: Performance Marketing Lead, subscription box brand, ~110 employees.\n\n- Tests 2-3 variants per campaign. 'We'd do more but production is the bottleneck. Our designer is booked.'\n- Process: sets up A/B tests natively in Meta. 'Meta's testing interface is okay. It's not great but it works.'\n- Cross-platform problem: 'The test that worked on Meta doesn't necessarily work on TikTok. And I have no way to see them side by side. I'm logging into two platforms and squinting at different reports.'\n- 'I called a test a winner last month and later realised the winning variant only had 40% of the traffic it needed for significance. I was just guessing.'\n- Knowledge capture: 'We have a Google Sheet with winning creative notes. It's basically a graveyard of insights nobody reads.'\n- Would pay: 'If something helped me run 2x more tests without more production work, yes. Maybe £300-400/month.'\n- Hesitation: 'Automated testing tools often feel like they're optimising for clicks, not the actual outcome I care about — subscriptions.'"
+    },
+    {
+      "id": "SES2",
+      "study_id": "creative-testing-scale",
+      "participant_id": "P2",
+      "raw_notes": "P2: Head of Brand and Performance, D2C wellness brand, ~70 employees. Challenges the framing.\n\n- 'We actually test a lot — 6-8 variants per campaign. But that's because we have a freelance motion designer we use just for creative variations.'\n- 'The bottleneck for us isn't setup or analysis. It's deciding which creative hypothesis to test in the first place.'\n- Challenges the hypothesis: 'I don't think management overhead is the real problem. Most teams I know just don't have a systematic testing framework. They test randomly.'\n- 'Even when tests run well, the insights don't propagate. Each campaign manager has their own approach. There's no institutional learning.'\n- 'The product I'd want is something that helps me decide what to test, based on what others have learned. A creative intelligence layer, not just a test manager.'\n- Would pay: 'For a genuine creative insights library across the industry? Absolutely.'"
+    },
+    {
+      "id": "SES3",
+      "study_id": "creative-testing-scale",
+      "participant_id": "P3",
+      "raw_notes": "P3: Digital Advertising Manager, retail chain, ~300 employees.\n\n- 'We run maybe 2 variants per campaign. Always have. It's just what we've always done.'\n- Doesn't actively feel the pain: 'We hit our targets most quarters. I'm not sure we're leaving that much on the table from creative testing.'\n- Setup process: 'Setting up a test in DV360 takes me about an hour. Then I wait. Then I look at the results. It's not hard, it's just slow.'\n- 'The analysis is the hard part. I'm not a statistician. I look at CTR and assume the higher one wins. I know that's probably not right.'\n- Key insight: 'Our agency does creative testing for us on big campaigns. For smaller campaigns we just pick one concept and run it.'\n- Budget constraint: 'Even if testing tools were free, we'd still need to produce the variants. That's where the money goes.'\n- 'A tool that suggested which elements to vary — headline vs image vs CTA — would be more useful to me than a tool that runs the test faster.'"
+    },
+    {
+      "id": "SES4",
+      "study_id": "creative-testing-scale",
+      "participant_id": "P4",
+      "raw_notes": "P4: CMO, B2C app, ~200 employees. Strong point of view on the problem.\n\n- 'We are terrible at creative testing. I'll admit that freely. We have all the data, we just don't act on it.'\n- Root cause in her view: 'The problem is organisational, not technical. Creative and performance are two separate teams with different incentives. Creative wants to protect their concepts. Performance wants to churn through variants. They fight.'\n- 'Even if you give me the perfect testing tool, unless we resolve the internal tension about who owns creative decisions, nothing will change.'\n- Has tried automated tools: 'We piloted Smartly.io for dynamic creative optimisation. It worked technically but the creative team hated losing control.'\n- 'The test results come out and nobody wants to act on them if it means overruling the creative director. That's a culture problem.'\n- Would buy: 'Only if it also helped with the internal communication — showing creative teams the data in a way they can engage with, not a performance dashboard that makes them feel judged.'"
+    },
+    {
+      "id": "SES5",
+      "study_id": "creative-testing-scale",
+      "participant_id": "P5",
+      "raw_notes": "P5: Paid social consultant, 7 years experience, works with both agency and brand-side clients.\n\n- 'The 3 variants per campaign number is about right in my experience. Most teams run 2-4.'\n- Agrees setup is a friction point but isn't the primary constraint: 'Setting up a test takes maybe 45 minutes. That's not nothing but it's not the blocker.'\n- 'The bigger issue is sample size. Most mid-market brands don't have the traffic volume to run statistically valid tests. They end up calling winners prematurely.'\n- 'I've seen brands run a test for 2 days, see one variant outperforming by 10%, call it a winner, and reallocate. That's not science, that's noise.'\n- 'The product that would actually help here is one that estimates required sample size upfront and prevents you from calling a test early. Statistical guardrails, not just infrastructure.'\n- On knowledge capture: 'This is the biggest waste in the industry. Every test result is siloed. I've seen the same hypothesis tested 5 times at the same company because nobody documented the last result.'\n- Would recommend: 'Yes, if it focused on improving test quality rather than test velocity.'"
+    }
+  ]
+}

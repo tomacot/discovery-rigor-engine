@@ -1,8 +1,8 @@
 # Product Requirements Document: Discovery Rigor Engine
 
 **Author:** https://github.com/tomacot 
-**Version:** 1.0 — MVP Specification
-**Status:** Ready for development
+**Version:** 1.1 — Shipped
+**Status:** Live at AWS ECS Fargate + ALB
 
 ---
 
@@ -83,19 +83,24 @@ Of the seven capability areas identified in the research playbook, the MVP will 
 3. **Prioritisation (interactive):** For each assumption, the user rates two dimensions on a 1–5 scale:
    - **Importance:** If this assumption is wrong, does the whole idea collapse?
    - **Evidence level:** How much evidence do we currently have?
+   - Sliders default to **LLM-estimated scores** (not zero) — the agent estimates both values during decomposition and provides a one-sentence rationale caption beneath each slider explaining the estimate. The user adjusts from an intelligent starting point rather than from scratch.
 4. **Output:** A prioritised assumption map:
    - A ranked list with the "riskiest assumptions" (high importance + low evidence) at the top.
-   - For each of the top 3 riskiest assumptions: a suggested research question and recommended evidence type (behavioural observation, past-behaviour interview, survey validation, etc.).
+   - For **every** assumption (not just top 3): a specific research question grounded in the assumption's risk lens.
    - A text-based 2×2 matrix visualisation (Importance vs. Evidence).
+   - A downloadable Markdown research script: all assumptions grouped by risk lens with their research questions, plus 5 general interview questions as a discussion guide.
 
 #### Acceptance criteria
 
-- [ ] Given a free-text hypothesis, the agent produces at least 5 categorised assumptions without the user having to structure anything.
-- [ ] Each assumption is tagged with exactly one risk lens (desirability, usability, feasibility, viability).
-- [ ] The user can rate each assumption interactively (importance and evidence level).
-- [ ] The output ranks assumptions by risk (importance × inverse of evidence) and highlights the top 3.
-- [ ] For each top-3 assumption, a specific research question is generated (not generic).
-- [ ] The full assumption map is stored in session state and passed downstream to the synthesis step.
+- [x] Given a free-text hypothesis, the agent produces at least 5 categorised assumptions without the user having to structure anything.
+- [x] Each assumption is tagged with exactly one risk lens (desirability, usability, feasibility, viability).
+- [x] The agent estimates importance and evidence_level scores during decomposition; sliders start at those estimates, not at zero.
+- [x] A one-sentence rationale caption is shown beneath each slider explaining the LLM's estimate.
+- [x] The user can adjust each assumption interactively (importance and evidence level).
+- [x] The output ranks assumptions by risk (importance × inverse of evidence) and highlights the top 3.
+- [x] A specific research question is generated for **every** assumption (not just top 3).
+- [x] The full assumption map is downloadable as a Markdown research script with assumptions grouped by risk lens.
+- [x] The full assumption map is stored in session state and passed downstream to the synthesis step.
 
 ---
 
@@ -124,12 +129,13 @@ Of the seven capability areas identified in the research playbook, the MVP will 
 
 #### Acceptance criteria
 
-- [ ] The agent correctly flags at least 80% of leading, hypothetical, and solution-selling patterns in a test set of 20 known-bad questions (provided as sample data).
-- [ ] Each flagged question includes a specific rewrite, not just a warning.
-- [ ] Rewrites consistently use past-behaviour framing ("Tell me about the last time…", "Walk me through…", "What did you try…").
-- [ ] Clean questions (genuinely open, past-behaviour-based) are not false-flagged at a rate above 15%.
-- [ ] The output includes a copyable "clean script" block with all rewrites applied.
-- [ ] The bias taxonomy is deterministic (rule-based pattern matching where possible, LLM for nuance) — not purely LLM-generated, to ensure consistency.
+- [x] The agent correctly flags at least 80% of leading, hypothetical, and solution-selling patterns in a test set of 20 known-bad questions (provided as sample data).
+- [x] Each flagged question includes a specific rewrite, not just a warning.
+- [x] Rewrites consistently use past-behaviour framing ("Tell me about the last time…", "Walk me through…", "What did you try…").
+- [x] Clean questions (genuinely open, past-behaviour-based) are not false-flagged at a rate above 15%.
+- [x] The output includes a copyable "clean script" block with all rewrites applied.
+- [x] The bias taxonomy is deterministic (rule-based pattern matching where possible, LLM for nuance) — not purely LLM-generated, to ensure consistency.
+- [x] 5 example scripts are selectable from a dropdown to pre-fill the input without pasting.
 
 ---
 
@@ -140,7 +146,7 @@ Of the seven capability areas identified in the research playbook, the MVP will 
 #### Flow
 
 **Step 1 — Ingest raw data:**
-The user provides raw interview notes (plain text, one session per block or separated by a delimiter). The tool also receives the assumption map from capability 4.1 to anchor synthesis to the original research questions.
+The user provides raw interview notes by: (a) pasting text into the session form, (b) uploading `.txt` transcript files (participant ID auto-detected from filename — `P1.txt`, `p2_interview.txt`, `participant3.txt` are all handled), or (c) using a pre-loaded fixture study. The tool also receives the assumption map from capability 4.1 to anchor synthesis to the original research questions.
 
 **Step 2 — Open coding (LLM-assisted):**
 The agent reads each note block and extracts discrete observations, tagging each as:
@@ -164,6 +170,14 @@ The agent generates insight statements from themes, each following the structure
 - **Counterevidence:** What complicates or limits this insight
 - **Implication:** What this means for the product decision
 - **Assumption addressed:** Which assumption from the map this informs, and whether it was confirmed, challenged, or remains uncertain
+- **Supporting quotes:** Direct participant quotes extracted verbatim from session notes
+- **Frequency:** How many of the N sessions mentioned this (e.g., "4 out of 5 participants")
+- **Why it matters:** One sentence on business/UX/product impact
+- **User segments affected:** Which participant types care most about this finding
+- **Current workarounds:** How users are solving this today without a purpose-built tool
+- **Potential solutions:** 2–3 solution directions to explore (not prescriptive features)
+- **Priority:** Critical / High / Medium / Low
+- **Actionability:** Clear / Fuzzy / Needs more research
 
 **Step 5 — Decision record:**
 The agent generates a structured decision record:
@@ -173,18 +187,26 @@ The agent generates a structured decision record:
 - **Confidence score:** Aggregate based on evidence strength, theme saturation, counterevidence coverage, and sample diversity
 - **What we de-scoped:** Assumptions not addressed and why
 - **Remaining risks:** What could still be wrong
-- **Next steps:** What research or experiment to run next if confidence is insufficient
+- **Tiered next steps:** Immediate (do now) / Short-term (next quarter) / Long-term (future strategy) — each with suggested owners
+- **What NOT to do:** Ideas explicitly invalidated by the research
+- **Segment-specific insights:** How findings differ between participant segments
+- **Contradictions and open questions:** Where participants disagreed and what the research still cannot answer
 
 #### Acceptance criteria
 
-- [ ] Given raw notes from at least 3 mock interview sessions, the agent produces coded observations with type tags and session source attribution.
-- [ ] No observation is tagged as both "observation" and "interpretation" — the separation is enforced.
-- [ ] Themes require support from ≥2 sessions; single-source themes are flagged as "emerging, not confirmed."
-- [ ] Every theme includes a counterevidence field (populated or explicitly marked "none found").
-- [ ] Insight statements follow the exact template structure (insight, evidence strength, supporting evidence, counterevidence, implication, assumption addressed).
-- [ ] The decision record includes a confidence score with a transparent breakdown of how it was calculated.
-- [ ] A stakeholder can trace backwards: Decision → Insight → Theme → Observation → Raw note + Session source.
-- [ ] The full synthesis output is exportable as a markdown document.
+- [x] Session notes can be entered via text paste, `.txt` file upload, or pre-loaded fixture — all three paths produce identical session objects in state.
+- [x] Given raw notes from at least 2 sessions, the agent produces coded observations with type tags and session source attribution.
+- [x] No observation is tagged as both "observation" and "interpretation" — the separation is enforced.
+- [x] Themes require support from ≥2 sessions; single-source themes are flagged as "emerging, not confirmed."
+- [x] Every theme includes a counterevidence field (populated or explicitly marked "none found").
+- [x] Insight statements include all required fields: statement, evidence_strength, supporting_quotes, frequency, why_it_matters, user_segments_affected, current_workarounds, potential_solutions, priority, actionability, counterevidence, implication, assumption_status.
+- [x] Decision record includes tiered next steps (immediate / short-term / long-term), what_not_to_do, segment_specific_insights, and contradictions_and_open_questions.
+- [x] The decision record includes a confidence score with a transparent breakdown of how it was calculated.
+- [x] Results are displayed across three tabs: Decision, Insights, Evidence Chain.
+- [x] Evidence Chain tab provides 3-level nested drill-down: Insight → Theme → Observation → Session excerpt.
+- [x] Node-level progress is shown via `st.status()` during synthesis (5 steps visible).
+- [x] A stakeholder can trace backwards: Decision → Insight → Theme → Observation → Raw note + Session source.
+- [x] The full synthesis output is exportable as a Markdown decision record.
 
 ---
 
@@ -211,11 +233,13 @@ The agent generates a structured decision record:
 │  study_id (FK)   │
 │  statement       │  The assumption in plain language
 │  risk_lens       │  desirability | usability | feasibility | viability
-│  importance      │  1-5 (user-rated)
-│  evidence_level  │  1-5 (user-rated)
+│  importance      │  1-5 (starts at LLM estimate; user-adjusted)
+│  evidence_level  │  1-5 (starts at LLM estimate; user-adjusted)
+│  importance_rationale│ One-sentence LLM rationale for the importance estimate
+│  evidence_rationale│  One-sentence LLM rationale for the evidence estimate
 │  risk_score      │  Computed: importance × (6 - evidence_level)
 │  status          │  untested | confirmed | challenged | uncertain
-│  research_question│ Generated research question for this assumption
+│  research_question│ Generated research question for this assumption (all, not just top 3)
 └────────┬────────┘
          │ 1:many (addressed by)
          ▼
@@ -290,6 +314,14 @@ The agent generates a structured decision record:
 │  implication     │  What this means for the product decision
 │  assumption_id   │  FK to assumption addressed (nullable)
 │  assumption_status│ confirmed | challenged | uncertain
+│  supporting_quotes│ list[str] — verbatim quotes from session notes
+│  frequency       │  "N out of M participants mentioned this"
+│  why_it_matters  │  One sentence: business/UX/product impact
+│  user_segments_affected│ Which participant types are most affected
+│  current_workarounds│ How users solve this today without a purpose-built tool
+│  potential_solutions│ list[str] — 2-3 solution directions to explore
+│  priority        │  critical | high | medium | low
+│  actionability   │  clear | fuzzy | needs_more_research
 └────────┬────────┘
          │ many:1
          ▼
@@ -302,9 +334,16 @@ The agent generates a structured decision record:
 │  recommendation  │  pursue | pivot | park | need_more_evidence
 │  evidence_summary│  Narrative summary of key evidence
 │  confidence_score│  0-100, computed from evidence strength + saturation + coverage
+│  confidence_breakdown│ dict — per-component score breakdown (shown in UI)
 │  descoped_items  │  What was not addressed and why
 │  remaining_risks │  What could still be wrong
-│  next_steps      │  Recommended follow-up research or experiments
+│  next_steps      │  Legacy field — kept for backwards compatibility
+│  next_steps_immediate│ Actions to take now (with suggested owners)
+│  next_steps_short_term│ Next quarter — validation, further exploration
+│  next_steps_long_term│ Bigger strategic opportunities
+│  what_not_to_do  │  Ideas explicitly invalidated by the research
+│  segment_specific_insights│ How findings differ between participant segments
+│  contradictions_and_open_questions│ Where participants disagreed; what the research can't yet answer
 │  created_at      │
 └─────────────────┘
 
@@ -313,15 +352,25 @@ Join tables:
   InsightTheme      (insight_id, theme_id)
 ```
 
-### Storage approach (MVP)
+### Storage approach
 
-For the weekend demo, all data lives in **in-memory Python dictionaries** managed by a simple `StudyStore` class with methods like `create_study()`, `add_assumption()`, `add_session()`, etc. No database required.
+For local development and demo, all data lives in **in-memory Python dictionaries** managed by a simple `StudyStore` class. No database required for local runs. The deployed AWS version provisions a DynamoDB table (wired in for v2 production hardening).
 
-Sample data is loaded from **JSON fixture files** in a `/data` directory so anyone can clone and run the demo with realistic mock data pre-loaded.
+Sample data is loaded from **JSON fixture files** in `data/` so anyone can clone and run the demo with realistic mock data pre-loaded.
 
-For the demo, we provide two pre-built fixtures:
-1. **Adtech creative optimisation study** — Assumptions, scripts, and 5 mock interview sessions about how mid-market advertisers manage creative assets across channels.
-2. **Empty study** — For users who want to enter their own hypothesis and walk through the flow from scratch.
+The demo ships with **7 fixture files**:
+
+| Filename | Study ID | Topic |
+|----------|----------|-------|
+| `adtech_study.json` | `adtech-creative-optimisation` | Mid-market advertisers managing creative assets across channels — the primary walkthrough fixture |
+| `audience_segmentation.json` | `audience-segmentation-automation` | Over-reliance on broad demographic targeting due to lack of accessible self-serve segmentation tooling |
+| `attribution_modelling.json` | `attribution-modelling-gaps` | Systematic over-investment in last-click search because multi-touch attribution is inaccessible at mid-market scale |
+| `campaign_pacing.json` | `campaign-pacing-optimisation` | Manual pacing adjustments causing 15–20% efficiency loss because DSP reallocation tools aren't suited to non-specialists |
+| `creative_testing.json` | `creative-testing-scale` | Fewer than 3 creative variants per campaign because A/B test setup and analysis overhead outweighs perceived benefit |
+| `frequency_management.json` | `cross-channel-frequency` | Unknowing audience saturation from display + social + video because no tool unifies frequency capping across DSPs |
+| `empty_study.json` | — | Blank template for users entering their own hypothesis from scratch |
+
+Each non-empty fixture includes: 8–10 pre-rated assumptions across all 4 risk lenses, 1 interview script (mix of clean and biased questions), and 5 mock sessions (P1–P5) with rich narrative notes including at least 1–2 sceptical participants. Users can also upload their own study JSON via the home page file uploader.
 
 ---
 
@@ -402,7 +451,7 @@ The system is a single LangGraph `StateGraph` with conditional branching based o
 | `decompose_hypothesis` | LLM call | Free-text hypothesis | List of 5-10 assumption objects | Structured output with JSON schema |
 | `categorise_risk_lens` | LLM call | Assumption list | Same list with risk_lens tags | Could merge with decompose; separated for clarity and debuggability |
 | `interactive_rating` | Human-in-the-loop | Assumption list | Same list with importance + evidence scores | Streamlit widget; user rates each assumption |
-| `compute_risk_scores` | Deterministic + LLM | Rated assumptions | Ranked list + research questions for top 3 | Risk score is arithmetic; research questions are LLM-generated |
+| `compute_risk_scores` | Deterministic + LLM | Rated assumptions | Ranked list + research questions for **all** assumptions | Risk score is arithmetic; research questions are LLM-generated for every assumption |
 | `output_assumption_map` | Deterministic | Ranked assumptions | Formatted display (table + 2×2 matrix) | Streamlit rendering |
 | `parse_questions` | Deterministic | Raw script text | List of individual question strings | Regex/split logic |
 | `analyse_bias` | LLM call | Individual question + bias taxonomy | Verdict + issue types + explanation | One LLM call per question (can batch) |
@@ -472,7 +521,7 @@ class StudyState(TypedDict):
 | **Three capabilities, not seven** | A weekend-scoped demo needs to be completable end-to-end. Three capabilities that chain together (map assumptions → review script → synthesise findings) tell a coherent story. Seven half-built features tell none. |
 | **Streamlit over CLI** | The outputs of this tool are visual — assumption maps, bias-annotated scripts, traceable synthesis chains. A CLI would force users to imagine what these look like. Streamlit lets them see it. |
 | **In-memory locally, DynamoDB deployed** | Local run has zero setup friction — `pip install → streamlit run → working demo` in under 2 minutes. Deployed version uses DynamoDB so user state persists across sessions. No local database infra required. |
-| **Pre-loaded adtech sample data** | The demo must work without requiring a user to write a hypothesis, create a script, and type up interview notes. The adtech fixture makes the tool immediately explorable. |
+| **6 pre-loaded adtech sample studies** | The demo must work without requiring a user to create data. Six complete fixtures (each with assumptions, script, and 5 sessions) let anyone explore the full workflow immediately. Users can also upload their own study JSON. |
 | **LangGraph over simple function chaining** | The tool could be built as sequential function calls. LangGraph adds complexity — but it's complexity that demonstrates understanding of agentic architecture, human-in-the-loop patterns, and state management. The architecture is the point. |
 | **Hybrid LLM + deterministic** | Pure LLM would be non-reproducible. Pure rules would be brittle. The design uses LLM for reasoning tasks (decomposition, coding, synthesis) and deterministic logic for scoring, routing, and validation. This is a deliberate product decision about reliability vs. flexibility. |
 | **Claude as primary LLM** | Strong reasoning capability for structured analysis tasks. Every LLM node uses a thin wrapper so switching providers requires changing one config, not refactoring code. |
@@ -483,7 +532,7 @@ class StudyState(TypedDict):
 |---------|-----------|
 | **No persistent database** | No benefit for single-session local use. Revisit in v2 for repository feature. |
 | **No multi-user / team features** | Weekend scope. The tool models a single PM's workflow, not team collaboration. |
-| **No file upload for notes** | MVP uses text input. File parsing (docx, PDF, audio transcription) is a v2 feature that adds significant complexity for marginal demo value. |
+| **Transcript upload (.txt only)** | `.txt` file upload is supported in v1.1 for synthesis sessions — upload one file per participant, filename is used to auto-detect the participant ID. Richer formats (docx, PDF, audio transcription) remain a v2 feature. |
 | **No real-time interview companion** | The playbook describes an execution assistant that runs *during* interviews. This is architecturally different (streaming, real-time, voice) and is a separate product. The MVP reviews scripts *before* interviews and synthesises notes *after*. |
 | **No ethics/consent workflow** | Important for production but adds screens without adding demo impact. Addressed in README as a roadmap item with design rationale. |
 | **No survey or quant method support** | MVP focuses on qualitative interview research, the most common PM scenario. Quant support requires different data models and analysis logic. |
@@ -508,7 +557,7 @@ class StudyState(TypedDict):
 | **Research Repository** | Persistent storage (SQLite or Supabase) with tagging taxonomy (decision type, segment, journey step, feature area, geography). Duplicate-detection alerts when a new study overlaps with an existing one. | Large |
 | **Method Recommender** | Given a decision type and risk lens, recommend the optimal research method(s) from the full taxonomy (contextual inquiry, diary studies, usability tests, surveys, A/B tests, etc.) with heuristic sample sizes and time/cost estimates. | Medium |
 | **Ethics & Consent Module** | GDPR-aware consent script generator, data minimisation checklist, special category data warnings, and regulated-context playbooks (healthcare, fintech, children). | Medium |
-| **File Upload & Transcription** | Accept .docx, .pdf, and audio files as session inputs. Audio transcription via Whisper. Reduces friction for real-world use. | Medium |
+| **Rich File Upload & Transcription** | `.txt` transcript upload is already supported (v1.1). v2 extends to .docx, .pdf, and audio files. Audio transcription via Whisper. | Medium |
 
 ### v3 — Team & Integration
 
@@ -596,9 +645,9 @@ cdk bootstrap && cdk deploy
 
 ## 10. Sample Data Specification
 
-The adtech fixture should be realistic enough that someone familiar with digital advertising recognises the scenario.
+All fixtures are realistic enough that someone familiar with digital advertising immediately recognises the scenario. The primary fixture is documented below; the other five follow the same structure.
 
-### Study: "Creative Asset Optimisation for Mid-Market Advertisers"
+### Primary Study: "Creative Asset Optimisation for Mid-Market Advertisers"
 
 **Hypothesis:** "We believe mid-market advertisers (50-500 employees) waste significant time manually adapting creative assets across channels (Meta, Google, TikTok, programmatic) because they lack automated tools that provide real-time performance feedback at the creative level, leading to suboptimal ad performance and inefficient use of media budgets."
 

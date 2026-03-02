@@ -1,0 +1,138 @@
+{
+  "study_id": "cross-channel-frequency",
+  "hypothesis": "We believe mid-market brands running display, social, and video campaigns simultaneously are unknowingly hitting the same audience segments at damaging frequency because no accessible tool unifies frequency capping across DSPs and walled-garden social platforms.",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "Mid-market brands running 3+ channels are reaching the same users more than 10 times per week across channels",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A2",
+      "statement": "Excess frequency is causing measurable ad fatigue and ROAS degradation for these brands",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A3",
+      "statement": "Marketers are aware of the cross-channel frequency problem but lack tools to quantify or address it",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A4",
+      "statement": "Platform-level frequency caps are insufficient because they operate in silos",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A5",
+      "statement": "Teams can understand and act on cross-channel frequency reports without specialist training",
+      "risk_lens": "usability",
+      "importance": 3,
+      "evidence_level": 2,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A6",
+      "statement": "User identity can be matched across platforms with sufficient accuracy without third-party cookies",
+      "risk_lens": "feasibility",
+      "importance": 5,
+      "evidence_level": 1,
+      "risk_score": 25.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A7",
+      "statement": "Walled gardens (Meta, TikTok, YouTube) will provide the data access needed for cross-platform frequency management",
+      "risk_lens": "feasibility",
+      "importance": 5,
+      "evidence_level": 1,
+      "risk_score": 25.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A8",
+      "statement": "The budget saving from reduced ad fatigue justifies a standalone frequency management tool",
+      "risk_lens": "viability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A9",
+      "statement": "Advertisers have authority to change frequency caps across platforms without agency approval",
+      "risk_lens": "viability",
+      "importance": 3,
+      "evidence_level": 2,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    }
+  ],
+  "scripts": [
+    {
+      "id": "S1",
+      "study_id": "cross-channel-frequency",
+      "raw_text": "1. Tell me about how you currently manage ad frequency across your campaigns.\n2. Do you think your audiences are seeing your ads too often across channels?\n3. How do you set frequency caps and do you feel they're working?\n4. Have you ever seen evidence of ad fatigue in your campaign performance data?\n5. Don't you think the platforms are actively hiding cross-channel frequency data from you?\n6. How would you know if an audience segment was being hit at damaging frequency across all your channels simultaneously?\n7. Would you pay for a tool that showed you your true cross-channel frequency picture?\n8. What do you think the right frequency level is for your campaigns, and how did you arrive at that?\n9. What's the biggest frustration you have with how frequency is managed in your current setup?\n10. If cross-channel frequency was solved, what other targeting problem would you want to fix next?",
+      "clean_text": "",
+      "bias_score": 0.0,
+      "questions": []
+    }
+  ],
+  "sessions": [
+    {
+      "id": "SES1",
+      "study_id": "cross-channel-frequency",
+      "participant_id": "P1",
+      "raw_notes": "P1: Senior Performance Manager, insurance brand, ~250 employees. High awareness of the problem.\n\n- Runs Meta, YouTube, programmatic display simultaneously. 'All targeting broadly the same mid-funnel audience.'\n- Frequency awareness: 'I know it's a problem. I just can't prove it. Our Meta frequency is capped at 7/week. Our DV360 is capped at 5/week. Our YouTube is another 3-5. In theory the same user could see us 17 times a week.'\n- Evidence of fatigue: 'Our CPMs go up and CTR goes down after about week 3 on any campaign. We reset creatives. It helps temporarily.'\n- Current solution: 'Honestly we just rotate creatives more often. It's a workaround, not a fix.'\n- 'I've looked at identity solutions like LiveRamp but they're enterprise-priced and I'm not sure they work post-cookie anyway.'\n- Would pay: 'If something could genuinely show me my true cross-channel reach and frequency, £500-800/month easily.'\n- Scepticism: 'The walled garden problem is real. Meta will never share user-level data with a third party. How do you actually solve this?'"
+    },
+    {
+      "id": "SES2",
+      "study_id": "cross-channel-frequency",
+      "participant_id": "P2",
+      "raw_notes": "P2: Digital Marketing Manager, B2B manufacturing company, ~300 employees. Sceptical about applicability to their context.\n\nChallenged the hypothesis from the first question: 'We don't have a frequency problem at all. Our total addressable audience globally is maybe 50,000 people who purchase industrial cutting equipment. We want to be seen by them. Frequently. High frequency is the goal, not a bug.'\n\nExplained the B2B purchase cycle logic: 'Our deals take 6-12 months to close. We're running retargeting specifically to stay top of mind through that entire window. If we're hitting someone 15 times a week across channels, that might actually be working as intended. I wouldn't cap that.'\n\nOffered a useful reframe of where frequency does become a problem for them: 'We do sometimes hit the same contacts across LinkedIn, programmatic display, and sponsored events simultaneously — all in the same week. When someone says they feel like we're following them everywhere, that's a bit awkward. But that's an account-level coordination problem between sales and marketing, not really a frequency management tooling problem.'\n\nExplicit about what they would buy: 'If you built something for account-based frequency management — tracking how many touchpoints a specific named account has seen across all channels — that would be genuinely useful to me. That is a real gap. But a broad frequency capping tool for B2C audiences? Not my problem.'\n\nLeft a clear product direction: 'You might be building the right product for the wrong customer. Talk to B2C consumer brands with big broad audiences. That's where this problem lives.'"
+    },
+    {
+      "id": "SES3",
+      "study_id": "cross-channel-frequency",
+      "participant_id": "P3",
+      "raw_notes": "P3: Media Planning Manager, FMCG brand, ~200 employees. Strong pain around frequency.\n\n- Runs Meta, TikTok, YouTube, programmatic display, and connected TV. 'Five channels, same audience, zero coordination on frequency.'\n- Pain: 'We had a campaign last quarter where our brand sentiment surveys showed a spike in negative brand recall. We traced it back to a week where we were live on all five channels with the same message. People were drowning in our ads.'\n- 'There is literally no tool that gives me a unified frequency view across those five channels. I've asked every vendor.'\n- Current workaround: 'We stagger channel activations. Run Meta for 2 weeks, then YouTube, then display. Very conservative. We probably underserve some channels as a result.'\n- 'Our media agency has a custom dashboard that pulls from each platform's API and tries to de-duplicate on hashed email. It's imperfect and expensive.'\n- Would pay: '£1,000-1,500/month if it actually worked. But I'm sceptical it's technically solvable without walled garden cooperation.'"
+    },
+    {
+      "id": "SES4",
+      "study_id": "cross-channel-frequency",
+      "participant_id": "P4",
+      "raw_notes": "P4: Head of Digital, retail bank, ~500 employees (larger than target but useful perspective).\n\n- Has full DMP and identity resolution stack. 'We have LiveRamp. It took 18 months to implement and £400k in year one.'\n- 'Cross-channel frequency management is absolutely a problem. We solved it but it cost a fortune.'\n- On mid-market: 'What we have is not accessible to a team without a dedicated adtech engineer and a DMP budget. The gap in the market is real.'\n- 'The technical challenge is the walled gardens. Meta won't participate in any unified frequency solution that gives you user-level data. The best you can get is modelled estimates.'\n- 'A modelled frequency estimate is still useful. Even knowing you're probably hitting users 15+ times a week is actionable, even if you can't be precise.'\n- Advice for product: 'Don't oversell the precision. Sell directional insight. If you claim 100% accuracy you'll lose credibility.'"
+    },
+    {
+      "id": "SES5",
+      "study_id": "cross-channel-frequency",
+      "participant_id": "P5",
+      "raw_notes": "P5: Adtech consultant, strong technical background. Very challenging on feasibility.\n\n- 'I'll be blunt: cross-channel frequency management for mid-market is largely unsolvable given the current walled garden architecture.'\n- 'Meta, TikTok, and Google will not give you user-level data. The API access you'd need simply doesn't exist.'\n- 'What you can do is use probabilistic matching — hashed emails, modelled identity graphs — to get an estimate. But it's 60-70% accurate at best for consumer brands.'\n- 'The problem gets worse every year. With iOS privacy changes and third-party cookie deprecation, even the imperfect solutions are degrading.'\n- 'I've seen two companies try to build this product in the last 5 years. One pivoted. One shut down. The core issue is the same: you can't solve a platform cooperation problem with software.'\n- 'What might work: focus on a specific channel pair where you can get better data — like Meta + CTV — and do that really well rather than claiming to solve the whole problem.'\n- 'The demand is real. The technical feasibility is the open question. If you can crack it, the market is there.'"
+    }
+  ]
+}

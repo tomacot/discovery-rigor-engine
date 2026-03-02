@@ -23,7 +23,7 @@ import pytest
 
 from src.nodes.script_assemble import assemble_clean_script
 from src.nodes.script_parse import parse_questions
-from src.state import Script, ScriptQuestion, Session, StudyState
+from src.state import Script, StudyState
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

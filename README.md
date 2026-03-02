@@ -35,30 +35,42 @@ The tool provides three core capabilities, each addressing a specific failure mo
 
 ### 1. Assumption Mapping & Prioritisation
 
-Enter a hypothesis in plain language. The agent decomposes it into discrete, testable assumptions — each tagged by risk lens (desirability, usability, feasibility, viability). You rate each assumption on importance and current evidence level. The tool ranks them by risk and generates specific research questions for the riskiest assumptions, so you research what matters most rather than what's easiest to test.
+Enter a hypothesis in plain language. The agent decomposes it into discrete, testable assumptions — each tagged by risk lens (desirability, usability, feasibility, viability) — and provides an estimated importance score, evidence level, and one-sentence rationale for each estimate. You adjust these ratings on sliders (starting from the LLM's estimates, not from zero). The tool ranks assumptions by risk and generates a specific research question for every assumption, so every assumption has a testable angle before you enter the field. The full assumption map is downloadable as a Markdown research script.
+
+![Assumption Map — risk-labelled assumptions with LLM-estimated importance and evidence scores, and rationale captions beneath each slider](docs/screenshots/04-assumption-map-sliders.png)
 
 ### 2. Interview Script Guardrails
 
 Paste your discussion guide. The agent analyses every question against a bias taxonomy — leading questions, hypotheticals, solution-selling, closed/binary questions, and double-barrelled questions. Each flagged question gets a plain-language explanation of why it's problematic and a de-biased rewrite grounded in past-behaviour framing. The output is a clean, copyable script with a bias score.
 
+![Script Review — select from five example discussion guides or paste your own; biased questions are flagged with explanations and de-biased rewrites](docs/screenshots/05-script-review-input.png)
+
 ### 3. Structured Synthesis with Decision Traceability
 
-Provide your raw interview notes. The agent guides them through a rigorous coding process:
+Provide your raw interview notes — by pasting text, uploading `.txt` transcript files, or loading a pre-built fixture. The agent guides them through a rigorous coding process:
 
 - **Open coding** — Extracts discrete observations from each session, tagged as behaviour, statement, or context. Observations are explicitly separated from interpretation.
 - **Axial coding** — Clusters observations into themes. Each theme requires support from at least 2 sessions (no single-source themes) and includes a mandatory counterevidence field.
-- **Selective coding** — Generates insight statements from themes, each with evidence strength rating, supporting evidence links, counterevidence, and a direct connection back to the assumption it addresses.
-- **Decision record** — Produces a structured recommendation (pursue / pivot / park / need more evidence) with a transparent confidence score, remaining risks, and next steps.
+- **Selective coding** — Generates insight statements from themes. Each insight includes: evidence strength, supporting quotes, frequency count, why it matters, which participant segments are most affected, how users currently work around the problem, potential solution directions, and priority/actionability ratings.
+- **Decision record** — Produces a structured recommendation (pursue / pivot / park / need more evidence) with a transparent confidence score, tiered next steps (immediate / short-term / long-term), what NOT to do, segment-specific insights, and contradictions/open questions.
 
-The result: a stakeholder can trace any decision backwards through the full chain — from the recommendation, to the insights that support it, to the themes those insights are based on, to the specific observations and interview sessions that ground those themes.
+Results are displayed across three tabs: **Decision**, **Insights**, and **Evidence Chain**. The evidence chain tab provides a 3-level interactive drill-down: click into any insight to see its supporting themes, click into any theme to see its coded observations, and expand any observation to read the raw session notes it came from.
+
+The full synthesis is exportable as a Markdown decision record. The result: a stakeholder can trace any recommendation backwards through the full chain — from recommendation to insights to themes to observations to raw interview notes.
+
+![Synthesis — Decision tab showing a Pivot recommendation with 81/100 confidence score and a structured narrative explanation](docs/screenshots/08-synthesis-decision.png)
+
+![Synthesis — Insights tab showing five insight cards with evidence strength labels and actionability indicators](docs/screenshots/10-synthesis-insights.png)
+
+![Evidence Chain — an expanded insight showing Priority, Actionability, Why it matters, supporting participant quotes, and counterevidence](docs/screenshots/13-evidence-chain-expanded.png)
 
 ## Demo
 
 **Live:** [http://Discov-Strea-WVEbKpZIjyJ9-1332689041.us-east-1.elb.amazonaws.com](http://Discov-Strea-WVEbKpZIjyJ9-1332689041.us-east-1.elb.amazonaws.com) — no account or setup required.
 
-<!-- TODO: Add screenshot or GIF of the running app -->
+![Home page — choose from six pre-built AdTech sample studies, create a new study from a hypothesis, or upload your own JSON](docs/screenshots/01-home.png)
 
-The tool comes pre-loaded with an **adtech sample study** ("Creative Asset Optimisation for Mid-Market Advertisers") that includes a hypothesis, 10 pre-built assumptions, a deliberately biased interview script, and 5 mock interview sessions with varied perspectives. You can explore the full workflow without entering any data.
+The tool comes pre-loaded with **six adtech sample studies** covering creative asset management, audience segmentation, attribution modelling, campaign pacing, creative testing at scale, and cross-channel frequency management. Each includes a hypothesis, 8–10 pre-rated assumptions, a deliberately biased interview script, and 5 mock interview sessions with varied perspectives (including sceptical participants). You can explore the full workflow without entering any data.
 
 ### Run locally
 
@@ -99,11 +111,11 @@ The system is built on a **LangGraph StateGraph** with three sub-flows branching
 ```
 Entry Router (deterministic)
     ├── Assumption Mapping Flow
-    │     decompose_hypothesis (LLM)
+    │     decompose_hypothesis (LLM — includes estimated scores + rationales)
     │     → categorise_risk_lens (LLM)
     │     → interactive_rating (human-in-the-loop via Streamlit)
     │     → compute_risk_scores (deterministic)
-    │     → generate_research_questions (LLM, top 3 only)
+    │     → generate_research_questions (LLM, all assumptions)
     │     → output_assumption_map (deterministic render)
     │
     ├── Script Review Flow
@@ -152,11 +164,12 @@ The breakdown is shown alongside the score so stakeholders can see exactly what 
 
 Using the pre-loaded adtech fixture:
 
-1. **Load the sample study** — "Creative Asset Optimisation for Mid-Market Advertisers" with its hypothesis about mid-market advertisers and cross-channel creative management.
-2. **Explore the assumption map** — 10 assumptions across desirability, usability, feasibility, and viability. The riskiest assumptions (high importance, low evidence) are highlighted with generated research questions.
-3. **Review the biased script** — The sample discussion guide contains 6 deliberately problematic questions alongside 4 clean ones. Watch the agent flag leading questions, hypotheticals, and solution-selling patterns, then generate de-biased rewrites.
-4. **Run synthesis** — The 5 mock interview sessions (including 2 sceptical participants) go through open coding, axial coding, and selective coding. Themes emerge with supporting and counterevidence.
-5. **Read the decision record** — A structured recommendation with confidence score, remaining risks, and a clear "because" linking back to evidence. Click through to trace any claim back to raw interview data.
+1. **Load a sample study** — Choose from 6 pre-built studies on the home page, or upload your own JSON. "Creative Asset Optimisation for Mid-Market Advertisers" is the primary fixture.
+2. **Explore the assumption map** — 10 assumptions across desirability, usability, feasibility, and viability. Sliders start at LLM-estimated scores with rationale captions underneath. Research questions are generated for every assumption. Download the full map as a Markdown research guide.
+3. **Review the biased script** — The sample discussion guide contains 6 deliberately problematic questions alongside 4 clean ones. Load one of 5 example scripts from the dropdown, or paste your own. Watch the agent flag leading questions, hypotheticals, and solution-selling patterns, then generate de-biased rewrites.
+4. **Run synthesis** — Add sessions by pasting notes, uploading `.txt` transcripts (named `P1.txt`, `P2.txt` etc. for auto-detection), or use the pre-loaded 5 sessions. Watch node-level progress in a live status panel. Themes emerge with supporting and counterevidence.
+5. **Read the decision record** — A structured recommendation with confidence score, tiered next steps, what NOT to do, segment insights, and contradictions. Explore the Insights tab for rich insight cards with participant quotes, frequency counts, workaround patterns, and solution directions. Click through the Evidence Chain tab to trace any claim back through themes → observations → raw session notes.
+6. **Export** — Download the full decision record or research script as Markdown.
 
 ## Product Decisions
 

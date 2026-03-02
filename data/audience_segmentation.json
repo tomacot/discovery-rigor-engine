@@ -1,0 +1,138 @@
+{
+  "study_id": "audience-segmentation-automation",
+  "hypothesis": "We believe mid-market advertisers (50-500 employees) over-rely on broad demographic targeting because self-serve segmentation tools require technical expertise their teams lack, resulting in wasted impressions and lower ROAS compared to enterprise competitors using sophisticated audience models.",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "Mid-market advertisers are aware their targeting is less sophisticated than enterprise competitors",
+      "risk_lens": "desirability",
+      "importance": 3,
+      "evidence_level": 2,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A2",
+      "statement": "Broad demographic targeting is a top-3 pain point for mid-market performance teams",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A3",
+      "statement": "Teams lack the SQL or data science skills to build custom audience segments themselves",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A4",
+      "statement": "Existing DSP audience tools (lookalike, interest targeting) don't meet mid-market needs",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A5",
+      "statement": "Advertisers can interpret audience performance reports without a dedicated analyst",
+      "risk_lens": "usability",
+      "importance": 3,
+      "evidence_level": 2,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A6",
+      "statement": "CRM or first-party data exists at mid-market scale but isn't connected to ad platforms",
+      "risk_lens": "feasibility",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A7",
+      "statement": "Platform APIs expose enough signal to build meaningful custom segments at this scale",
+      "risk_lens": "feasibility",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A8",
+      "statement": "Mid-market teams have budget headroom to pay for advanced segmentation above DSP fees",
+      "risk_lens": "viability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A9",
+      "statement": "Performance improvement from better segmentation is measurable within a campaign cycle",
+      "risk_lens": "viability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    }
+  ],
+  "scripts": [
+    {
+      "id": "S1",
+      "study_id": "audience-segmentation-automation",
+      "raw_text": "1. Tell me about your current audience targeting approach across your campaigns.\n2. Don't you think broad demographic targeting is the main reason your ROAS is underperforming?\n3. How do you decide which audience segments to use for a new campaign?\n4. Would you use an AI-powered segmentation tool if we built one?\n5. How often do you review audience performance and adjust your targeting?\n6. Have you ever tried to build custom audience segments? What happened?\n7. Surely lookalike audiences aren't giving you the granularity you need, right?\n8. What would a perfect audience targeting workflow look like for your team?\n9. Do you think the problem is your data quality or the platform tools?\n10. If we gave you better segmentation tools, would that fix your ROAS issues?",
+      "clean_text": "",
+      "bias_score": 0.0,
+      "questions": []
+    }
+  ],
+  "sessions": [
+    {
+      "id": "SES1",
+      "study_id": "audience-segmentation-automation",
+      "participant_id": "P1",
+      "raw_notes": "P1 — Head of Paid Media, e-commerce brand, ~120 employees. Has been in the role 3 years.\n\nPrimary channels: Meta Ads Manager and Google DV360. 'We basically live in Meta's targeting UI — it's the one interface my whole team is fluent in.'\n\nAudience strategy is interest categories plus lookalike audiences built off customer lists, refreshed quarterly. Described the iOS 14 fallout in detail: 'Our lookalikes have gotten progressively broader every year since iOS 14. The signal quality dropped and we never really recovered. We used to get lookalike audiences that performed 30-40% better than broad. Now it's maybe 10-15% better if we're lucky.'\n\nTried to build custom segments using Klaviyo CRM data to feed into DV360 but couldn't complete the integration: 'IT said it was too complex to set up without an engineer. We ended up exporting CSVs manually from Klaviyo every quarter and uploading them. It takes half a day and we always miss the campaign window.'\n\nSpends about 4 hours per week on audience management — 'mostly those CSV exports and re-uploads. It's tedious but I don't see an alternative.'\n\nNot aware of any mid-market segmentation tools: 'I'd love something that just connected our CRM to our DSP automatically without needing an engineer in the loop every time.'\n\nOn budget and approval: 'We have some headroom for tools but my CFO will only approve a renewal if we can show ROAS improvement within 90 days. That's the real constraint.'\n\nSceptical of AI promises: 'Every vendor claims to be AI now. I need to see the actual targeting logic and the data lineage, not a black box that just says it made things better.'"
+    },
+    {
+      "id": "SES2",
+      "study_id": "audience-segmentation-automation",
+      "participant_id": "P2",
+      "raw_notes": "P2 — Digital Marketing Manager, B2B SaaS company, ~80 employees. Sceptical and challenging throughout.\n\nPrimary channels: LinkedIn and Google Search, Meta used for retargeting only. Immediately pushed back on the core premise: 'We don't really have a segmentation problem. Our audience is narrow by definition — we target CFOs and VPs of Finance at mid-market tech companies. Job title plus company size, that's our entire targeting. Demographics are actually pretty good for us.'\n\nDoesn't feel the pain framed in the hypothesis: 'Broad demographic targeting makes sense for B2C. For us it's not the issue at all. Our ICP is defined by role and industry, not interests or behaviours.'\n\nDoes acknowledge one operational annoyance: 'I have to manually update our exclusion lists every month — existing customers, churned accounts, people who've already converted. That's annoying and time-consuming, maybe 2 hours a month. But it's not killing our ROAS, it's just boring work.'\n\nWould not pay for a segmentation tool: 'This feels like a product built entirely for B2C advertisers. I'm not your customer.' When pressed on whether any part of it would be useful: 'Look, maybe for the exclusion list automation. But I'd pay maybe $50/month for that, not $500.'\n\nOffered a redirect that was genuinely useful: 'The bigger issue for me isn't targeting at all. It's attribution. I can reach the right people. I just cannot prove it worked. That's where I'd spend money.' This came up unprompted twice."
+    },
+    {
+      "id": "SES3",
+      "study_id": "audience-segmentation-automation",
+      "participant_id": "P3",
+      "raw_notes": "P3 — Performance Marketing Lead, DTC skincare brand, ~200 employees. Strongest pain signal of all sessions.\n\nRuns Meta, TikTok, Pinterest, and YouTube simultaneously. Opened with a specific frustration: 'Every single platform has its own audience builder. If I want the same segment on all four platforms I have to recreate it four times, in four different interfaces, with four different formats. It takes a full Monday morning. That is insane in 2025.'\n\nTried to use Segment.io as a CDP to centralise audience definitions: 'IT told me it was too complex to implement without a dedicated engineer. We got 3 weeks into the integration and it stalled. The engineer got pulled onto something else and we never finished it. Cost us a lot of time and nothing to show for it.'\n\nHas quantified the performance gap: 'Our ROAS variance between audiences is huge — 4x difference between our best and worst segments consistently. I know the opportunity is there. I just don't have the time or tooling to fully capitalise on it.'\n\nCRM data (HubSpot) is good but disconnected: 'We have really clean first-party data in HubSpot. Purchase history, repurchase patterns, product preferences. There is genuinely no clean way to pipe that into TikTok's targeting. I've tried.'\n\nWould pay immediately: 'If you built a tool that syncs one segment definition across all four platforms and keeps it current automatically, I'd pay £500/month for that tomorrow. No negotiation. That's a genuine offer.'\n\nOne clear dealbreaker: 'It needs to be automatic. If I have to trigger a sync manually every time our CRM data updates, you haven't solved my problem — you've just given me a more expensive CSV export.'"
+    },
+    {
+      "id": "SES4",
+      "study_id": "audience-segmentation-automation",
+      "participant_id": "P4",
+      "raw_notes": "P4 — VP Marketing, retail brand, ~350 employees. Strategic perspective, less hands-on with day-to-day targeting.\n\nHas a team of three performance marketers, none with data science backgrounds. Acknowledged the gap without much prompting: 'We are definitely leaving money on the table with our targeting. I know it. But it's not the top priority this quarter — we have a website replatform consuming most of my team's attention.'\n\nDescribed an RFM model built in Excel last year: 'One of my team built it. It works in theory but it's completely manual — you have to re-run it every month and the outputs aren't connected to anything. Nobody trusts it enough to actually base media decisions on it.'\n\nHas evaluated enterprise solutions and found them inaccessible: 'I've had demos of LiveRamp and Salesforce Audience Studio. Both are genuinely impressive. Both are also priced for companies with a dedicated adtech team and a DMP budget. There is a real market gap between what the platforms offer natively and what enterprise tooling costs.'\n\nPrimary blocker is not willingness but compliance: 'Post-GDPR I'm genuinely nervous about tools that touch audience data in novel ways. Before I could buy anything, procurement would want to know about data residency, third-party data sharing agreements, and GDPR compliance certification. That's not a dealbreaker but it's a 3-month procurement process.'\n\nWilling to pay if the ROI case is clear: 'If it saved my team 5 hours a week on audience management, I could build the business case for £800-1,000/month easily. The challenge is proving that case within a 90-day trial window.'"
+    },
+    {
+      "id": "SES5",
+      "study_id": "audience-segmentation-automation",
+      "participant_id": "P5",
+      "raw_notes": "P5 — Freelance performance marketing consultant, works with 6 mid-market clients across B2C and DTC. Offered the most nuanced and challenging perspective.\n\nOpened by reframing the problem entirely: 'I'd push back on your hypothesis. I'd say about half my clients actually want more sophisticated segmentation — and half of them don't trust their own data enough to build on it in the first place. The tooling is not the primary constraint for that second group.'\n\nOn manual pain: 'Every single client I have is doing CSV exports and re-uploads to manage audiences. Every one. It's embarrassing that this is still how the industry works. That part of the hypothesis is completely right.'\n\nBut challenged the root cause: 'The real problem I see more often isn't the tooling, it's that teams don't have a process for audience hygiene. They keep adding new segments and they never retire the old ones. Over time they're running 40 overlapping audiences and nobody knows which are live or why.'\n\nData quality as the hard blocker: 'Most of my clients have CRM data but it's messy — duplicate records, inconsistent lifecycle stages, email fields that are 30% invalid. You cannot build good segments on top of dirty data, no matter how good the tool is. Any product that wins here needs to handle data cleaning and normalisation as a core feature, not an afterthought.'\n\nOn willingness to pay: 'I'd recommend it to my clients if and only if the implementation was genuinely turnkey. Not a 6-week integration project. If you can get them to first value in one day, there's a real market. If it takes a quarter, they'll churn before they see results.'"
+    }
+  ]
+}

@@ -25,11 +25,13 @@ class Assumption:
     id: str
     statement: str
     risk_lens: str  # desirability | usability | feasibility | viability
-    importance: int = 0  # 1-5, user-rated
-    evidence_level: int = 0  # 1-5, user-rated
+    importance: int = 0  # 1-5, user-rated (LLM estimates on decompose)
+    evidence_level: int = 0  # 1-5, user-rated (LLM estimates on decompose)
     risk_score: float = 0.0  # Computed: importance × (6 - evidence_level)
     status: str = "untested"  # untested | confirmed | challenged | uncertain
     research_question: str = ""
+    importance_rationale: str = ""  # LLM explanation of importance estimate
+    evidence_rationale: str = ""  # LLM explanation of evidence estimate
 
 
 @dataclass
@@ -105,6 +107,15 @@ class Insight:
     implication: str = ""
     assumption_id: Optional[str] = None
     assumption_status: str = "uncertain"  # confirmed | challenged | uncertain
+    # Synthesis.txt enrichment fields
+    supporting_quotes: list[str] = field(default_factory=list)
+    frequency: str = ""  # "X out of Y participants mentioned this"
+    why_it_matters: str = ""  # impact on UX / business / strategy
+    user_segments_affected: str = ""  # which participant types care most
+    current_workarounds: str = ""  # how users solve this today
+    potential_solutions: list[str] = field(default_factory=list)
+    actionability: str = "fuzzy"  # clear | fuzzy | needs_more_research
+    priority: str = "medium"  # critical | high | medium | low
 
 
 @dataclass
@@ -120,7 +131,14 @@ class DecisionRecord:
     confidence_breakdown: dict[str, float] = field(default_factory=dict)
     descoped_items: str = ""
     remaining_risks: str = ""
-    next_steps: str = ""
+    next_steps: str = ""  # kept for backward compat with fixtures
+    # Synthesis.txt enrichment fields
+    contradictions_and_open_questions: str = ""
+    what_not_to_do: str = ""
+    next_steps_immediate: str = ""  # do now
+    next_steps_short_term: str = ""  # next quarter
+    next_steps_long_term: str = ""  # future strategy
+    segment_specific_insights: str = ""  # key differences by participant type
 
 
 # --- LangGraph state ---

@@ -92,6 +92,8 @@ class StudyStore:
                 risk_score=a.get("risk_score", 0.0),
                 status=a.get("status", "untested"),
                 research_question=a.get("research_question", ""),
+                importance_rationale=a.get("importance_rationale", ""),
+                evidence_rationale=a.get("evidence_rationale", ""),
             )
             for a in data.get("assumptions", [])
         ]
@@ -112,6 +114,57 @@ class StudyStore:
             Session(
                 id=ses["id"],
                 study_id=ses["study_id"],
+                participant_id=ses["participant_id"],
+                raw_notes=ses["raw_notes"],
+            )
+            for ses in data.get("sessions", [])
+        ]
+
+        return state
+
+    def load_from_dict(self, data: dict) -> StudyState:
+        """
+        Deserialise a raw dict (e.g. from an uploaded JSON file) into a StudyState.
+
+        Uses the same deserialization logic as load_fixture() but accepts a pre-parsed
+        dict instead of reading from disk. This lets the home page accept file uploads.
+        """
+        study_id = data.get("study_id", f"upload-{id(data)}")
+        hypothesis = data.get("hypothesis", "")
+        state = self.create_study(study_id, hypothesis)
+
+        state["assumptions"] = [
+            Assumption(
+                id=a["id"],
+                statement=a["statement"],
+                risk_lens=a.get("risk_lens", ""),
+                importance=a.get("importance", 0),
+                evidence_level=a.get("evidence_level", 0),
+                risk_score=a.get("risk_score", 0.0),
+                status=a.get("status", "untested"),
+                research_question=a.get("research_question", ""),
+                importance_rationale=a.get("importance_rationale", ""),
+                evidence_rationale=a.get("evidence_rationale", ""),
+            )
+            for a in data.get("assumptions", [])
+        ]
+
+        state["scripts"] = [
+            Script(
+                id=s["id"],
+                study_id=s.get("study_id", study_id),
+                raw_text=s["raw_text"],
+                clean_text=s.get("clean_text", ""),
+                bias_score=s.get("bias_score", 0.0),
+                questions=[],
+            )
+            for s in data.get("scripts", [])
+        ]
+
+        state["sessions"] = [
+            Session(
+                id=ses["id"],
+                study_id=ses.get("study_id", study_id),
                 participant_id=ses["participant_id"],
                 raw_notes=ses["raw_notes"],
             )

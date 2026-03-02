@@ -1,8 +1,11 @@
 """
 Assumption research questions node.
 
-Generates one focused research question for each of the top 3 highest-risk
-assumptions. Runs last in the assumption-mapping sub-flow, after scoring.
+Generates one focused research question for every assumption in the map.
+Runs last in the assumption-mapping sub-flow, after scoring.
+
+Changed from top-3 only: every assumption gets a research question because
+the full set is needed for the downloadable research script (export.py).
 """
 
 from __future__ import annotations
@@ -19,17 +22,16 @@ from src.state import Assumption, StudyState
 
 
 def generate_research_questions(state: StudyState) -> dict:
-    """Add a research_question to the top 3 risk-scored assumptions via LLM."""
+    """Add a research_question to every risk-scored assumption via LLM."""
     assumptions: list[Assumption] = state["assumptions"]
     hypothesis: str = state["hypothesis"]
 
-    top_3 = assumptions[:3]
-    top_dicts = [
+    all_dicts = [
         {"id": a.id, "statement": a.statement, "risk_lens": a.risk_lens}
-        for a in top_3
+        for a in assumptions
     ]
 
-    prompt = get_research_questions_prompt(top_dicts, hypothesis)
+    prompt = get_research_questions_prompt(all_dicts, hypothesis)
     result: ResearchQuestions = call_llm_structured(
         prompt, ResearchQuestions, RESEARCH_QS_SYSTEM
     )

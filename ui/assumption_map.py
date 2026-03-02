@@ -4,16 +4,23 @@ Assumption Map page — hypothesis decomposition, interactive rating, and priori
 Two-phase flow:
   Phase 1: User provides hypothesis → graph decomposes and categorises assumptions.
   Phase 2: User rates each assumption (importance + evidence level) → graph scores
-           and generates research questions for the top 3.
+           and generates research questions for all assumptions.
 
 The human-in-the-loop rating step happens in Streamlit sliders between the two
 graph invocations, rather than via LangGraph's interrupt mechanism. Simpler.
+
+Sliders start at LLM-estimated scores (B3) with rationale captions below each
+pair (B4). A download button produces a Markdown research script once the map
+is complete (B6).
 """
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import streamlit as st
 
+from src.export import filename_for_research_script, format_research_script_md
 from src.state import Assumption, StudyState
 from ui.components import render_assumption_matrix
 
@@ -64,9 +71,9 @@ def render() -> None:
     if not state["assumption_map_complete"]:
         st.subheader("Step 2: Rate each assumption")
         st.markdown(
-            "For each assumption, rate two dimensions on a 1–5 scale:\n"
-            "- **Importance:** If this assumption is wrong, does the idea collapse?\n"
-            "- **Evidence level:** How much evidence do we currently have?"
+            "Scores below are LLM estimates — adjust based on your own knowledge:\n"
+            "- **Importance:** If this assumption is wrong, does the idea collapse? (1=peripheral, 5=core)\n"
+            "- **Evidence level:** How much validated evidence already exists? (1=pure assumption, 5=well established)"
         )
 
         rated_assumptions: list[Assumption] = []
@@ -74,20 +81,33 @@ def render() -> None:
             with st.expander(f"{i + 1}. [{a.risk_lens}] {a.statement}", expanded=True):
                 col1, col2 = st.columns(2)
                 importance = col1.slider(
-                    "Importance", 1, 5, max(a.importance, 1),
+                    "Importance",
+                    1,
+                    5,
+                    max(a.importance, 1),
                     key=f"imp_{a.id}",
-                    help="5 = if wrong, the entire idea collapses"
+                    help="5 = if wrong, the entire idea collapses",
                 )
                 evidence = col2.slider(
-                    "Evidence level", 1, 5, max(a.evidence_level, 1),
+                    "Evidence level",
+                    1,
+                    5,
+                    max(a.evidence_level, 1),
                     key=f"ev_{a.id}",
-                    help="5 = strong, validated evidence already exists"
+                    help="5 = strong, validated evidence already exists",
                 )
-                from dataclasses import replace
-                rated_assumptions.append(replace(a, importance=importance, evidence_level=evidence))
+
+                # LLM-generated rationale captions (B4)
+                if a.importance_rationale:
+                    col1.caption(f"ℹ️ {a.importance_rationale}")
+                if a.evidence_rationale:
+                    col2.caption(f"ℹ️ {a.evidence_rationale}")
+
+                rated_assumptions.append(
+                    replace(a, importance=importance, evidence_level=evidence)
+                )
 
         if st.button("Calculate risk scores and generate research questions", type="primary"):
-            # Update state with user ratings then run phase 2
             state["assumptions"] = rated_assumptions
             with st.spinner("Scoring assumptions and generating research questions…"):
                 state = _run_graph("assumption_mapping_phase2", state)
@@ -109,8 +129,18 @@ def render() -> None:
     st.divider()
     render_assumption_matrix(state["assumptions"])
 
+    # ── Download research script (B6) ─────────────────────────────────────────
+    md = format_research_script_md(state)
+    fname = filename_for_research_script(state)
+    st.download_button(
+        label="Download Research Script (.md)",
+        data=md,
+        file_name=fname,
+        mime="text/markdown",
+        help="Downloads all assumptions with research questions as a Markdown interview guide.",
+    )
+
     if st.button("Reset assumption map"):
-        from dataclasses import replace as dc_replace
         state["assumptions"] = []
         state["assumption_map_complete"] = False
         st.session_state.current_state = state

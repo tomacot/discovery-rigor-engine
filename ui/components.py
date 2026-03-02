@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from src.state import Assumption, DecisionRecord, Insight, Observation, ScriptQuestion, Theme
+from src.state import Assumption, Insight, Observation, ScriptQuestion, Session, Theme
 
 
 def render_assumption_matrix(assumptions: list[Assumption]) -> None:
@@ -69,13 +69,24 @@ def render_evidence_chain(
     insights: list[Insight],
     themes: list[Theme],
     observations: list[Observation],
+    sessions: list[Session] | None = None,
 ) -> None:
-    """Render the traceable chain: insight → theme → observation → raw notes."""
+    """Render the traceable chain: insight → theme → observation → session excerpt.
+
+    3-level nested drill-down (A4):
+      Level 1 — Insight expander: statement, strength, why_it_matters, supporting quotes
+      Level 2 — Theme expander: label, session count, description, counterevidence
+      Level 3 — Observation + Session expander: tagged observation + first 800 chars of raw notes
+
+    The optional sessions arg enables the third level (raw notes excerpt).
+    Without it, the chain still works but stops at the observation level.
+    """
     st.markdown("### Evidence Chain")
     st.caption("Trace any claim in the decision record back to raw interview data.")
 
     theme_by_id = {t.id: t for t in themes}
     obs_by_id = {o.id: o for o in observations}
+    session_by_id: dict[str, Session] = {s.id: s for s in (sessions or [])}
 
     for insight in insights:
         with st.expander(f"💡 {insight.statement}", expanded=False):
@@ -85,21 +96,72 @@ def render_evidence_chain(
                     insight.evidence_strength, "grey"
                 )
                 st.markdown(f":{strength_colour}[**{insight.evidence_strength.upper()} evidence**]")
+                if insight.priority:
+                    priority_colour = {
+                        "critical": "red",
+                        "high": "orange",
+                        "medium": "blue",
+                        "low": "grey",
+                    }.get(insight.priority, "grey")
+                    st.markdown(f":{priority_colour}[Priority: **{insight.priority}**]")
             with col2:
                 if insight.implication:
                     st.markdown(f"**Implication:** {insight.implication}")
 
+            if insight.why_it_matters:
+                st.info(f"**Why it matters:** {insight.why_it_matters}")
+
+            if insight.supporting_quotes:
+                st.markdown("**Supporting quotes:**")
+                for q in insight.supporting_quotes:
+                    st.markdown(f'> *"{q}"*')
+
+            if insight.frequency:
+                st.caption(f"Frequency: {insight.frequency}")
+
             if insight.counterevidence:
                 st.warning(f"**Counterevidence:** {insight.counterevidence}")
 
-            st.markdown("**Themes:**")
-            for theme_id in insight.theme_ids:
-                theme = theme_by_id.get(theme_id)
-                if not theme:
-                    continue
-                st.markdown(f"— 🏷️ **{theme.label}** ({theme.session_count} sessions)")
-                st.caption(theme.description)
-                for obs_id in theme.observation_ids[:3]:
-                    obs = obs_by_id.get(obs_id)
-                    if obs:
-                        st.caption(f"    › `[{obs.type}]` {obs.content[:120]}")
+            # Level 2 — Themes
+            if insight.theme_ids:
+                st.markdown("---")
+                st.markdown("**Themes contributing to this insight:**")
+                for theme_id in insight.theme_ids:
+                    theme = theme_by_id.get(theme_id)
+                    if not theme:
+                        continue
+
+                    with st.expander(
+                        f"🏷️ {theme.label} — {theme.session_count} sessions",
+                        expanded=False,
+                    ):
+                        st.markdown(theme.description)
+                        if theme.counterevidence and theme.counterevidence.lower() != "none found":
+                            st.caption(f"Counterevidence: {theme.counterevidence}")
+
+                        # Level 3 — Observations + optional session excerpt
+                        for obs_id in theme.observation_ids[:5]:
+                            obs = obs_by_id.get(obs_id)
+                            if not obs:
+                                continue
+
+                            obs_preview = obs.content[:100] + ("…" if len(obs.content) > 100 else "")
+                            with st.expander(
+                                f"📋 [{obs.type}] {obs_preview}",
+                                expanded=False,
+                            ):
+                                st.markdown(
+                                    f"**Type:** `{obs.type}` · **Session:** `{obs.session_id}`"
+                                )
+                                st.markdown(obs.content)
+
+                                session = session_by_id.get(obs.session_id)
+                                if session:
+                                    with st.expander(
+                                        f"📄 Raw notes — {session.participant_id}",
+                                        expanded=False,
+                                    ):
+                                        excerpt = session.raw_notes[:800]
+                                        if len(session.raw_notes) > 800:
+                                            excerpt += "\n\n_[truncated — 800 chars shown]_"
+                                        st.text(excerpt)

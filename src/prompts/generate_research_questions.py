@@ -1,9 +1,9 @@
 """
-Prompt: Generate Research Questions for Top-Risk Assumptions
+Prompt: Generate Research Questions for All Assumptions
 
 Used by: src/nodes/assumption_research_qs.py
 
-For the top 3 riskiest assumptions (ranked by risk score from scoring.py),
+For every assumption in the map (ranked by risk score from scoring.py),
 the LLM generates one past-behaviour-framed research question per assumption.
 These are ready-to-use interview questions, not topic areas.
 
@@ -35,7 +35,7 @@ class ResearchQuestion(BaseModel):
 
 
 class ResearchQuestions(BaseModel):
-    """LLM response: one research question per top-risk assumption."""
+    """LLM response: one research question per assumption."""
 
     questions: list[ResearchQuestion]
 
@@ -46,7 +46,7 @@ def get_research_questions_prompt(
 ) -> str:
     """Return the user prompt asking the LLM to write one research question per assumption.
 
-    Takes the top 3 riskiest assumptions and the original hypothesis as context.
+    Takes all assumptions (ranked by risk score) and the original hypothesis as context.
     Returns questions ready to include in an interview script.
     """
     assumption_lines = "\n".join(
@@ -54,12 +54,12 @@ def get_research_questions_prompt(
         for a in top_assumptions
     )
 
-    return f"""You are helping a PM write interview questions to test their riskiest research assumptions.
+    return f"""You are helping a PM write interview questions to test their research assumptions.
 
 RESEARCH HYPOTHESIS:
 {hypothesis}
 
-TOP ASSUMPTIONS TO TEST (ranked by risk — address these in priority order):
+ASSUMPTIONS TO TEST (ranked by risk — highest risk first):
 {assumption_lines}
 
 TASK:
