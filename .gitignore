@@ -1,0 +1,47 @@
+# Claude Code — internal AI assistant tooling, not for public repos
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
+# Internal development notes
+PROJECT_STATE.md
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing / Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Streamlit — exclude secrets only; config.toml is needed for deployment
+.streamlit/secrets.toml
+
+# CDK build artifacts — large generated files, never commit
+infrastructure/cdk.out/
+
+# Logs
+*.log

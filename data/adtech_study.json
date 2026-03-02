@@ -1,0 +1,148 @@
+{
+  "study_id": "adtech-creative-optimisation",
+  "hypothesis": "We believe mid-market advertisers (50-500 employees) waste significant time manually adapting creative assets across channels (Meta, Google, TikTok, programmatic) because they lack automated tools that provide real-time performance feedback at the creative level, leading to suboptimal ad performance and inefficient use of media budgets.",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "Mid-market advertisers manage creative across 3+ channels simultaneously",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 3,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A2",
+      "statement": "Manual creative adaptation is a top-3 workflow pain point for these teams",
+      "risk_lens": "desirability",
+      "importance": 5,
+      "evidence_level": 2,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A3",
+      "statement": "Existing tools (Canva, Adobe, platform-native) don't solve cross-channel creative optimisation",
+      "risk_lens": "desirability",
+      "importance": 4,
+      "evidence_level": 2,
+      "risk_score": 16.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A4",
+      "statement": "Advertisers can interpret creative-level performance data without dedicated analyst support",
+      "risk_lens": "usability",
+      "importance": 3,
+      "evidence_level": 2,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A5",
+      "statement": "Real-time cross-channel creative performance data is technically accessible via platform APIs",
+      "risk_lens": "feasibility",
+      "importance": 5,
+      "evidence_level": 1,
+      "risk_score": 25.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A6",
+      "statement": "Creative teams would trust AI-generated optimisation recommendations enough to act on them",
+      "risk_lens": "usability",
+      "importance": 4,
+      "evidence_level": 1,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A7",
+      "statement": "Advertisers would pay $500-2000/mo for this capability",
+      "risk_lens": "viability",
+      "importance": 5,
+      "evidence_level": 1,
+      "risk_score": 25.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A8",
+      "statement": "This tool doesn't cannibalise existing analytics products already in their stack",
+      "risk_lens": "viability",
+      "importance": 3,
+      "evidence_level": 2,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A9",
+      "statement": "Creative performance attribution across channels is accurate enough to be actionable",
+      "risk_lens": "feasibility",
+      "importance": 4,
+      "evidence_level": 1,
+      "risk_score": 20.0,
+      "status": "untested",
+      "research_question": ""
+    },
+    {
+      "id": "A10",
+      "statement": "Legal/brand compliance review processes don't block automated creative changes",
+      "risk_lens": "viability",
+      "importance": 3,
+      "evidence_level": 2,
+      "risk_score": 12.0,
+      "status": "untested",
+      "research_question": ""
+    }
+  ],
+  "scripts": [
+    {
+      "id": "S1",
+      "study_id": "adtech-creative-optimisation",
+      "raw_text": "1. Don't you find it frustrating to manage creative assets across multiple channels?\n2. Would you use a tool that automatically optimised your creatives?\n3. How helpful would AI-powered creative recommendations be for your team?\n4. Tell me about the last time you launched a campaign across multiple channels.\n5. Walk me through how you currently decide which creative to use on which channel.\n6. If we built a dashboard that showed real-time creative performance, would you pay for it?\n7. Is creative optimisation a problem for your team?\n8. What tools do you currently use for creative management, and how do you measure their effectiveness?\n9. Describe the last time a creative asset underperformed. What happened?\n10. How much time per week does your team spend on creative adaptation?",
+      "clean_text": "",
+      "bias_score": 0.0,
+      "questions": []
+    }
+  ],
+  "sessions": [
+    {
+      "id": "SES1",
+      "study_id": "adtech-creative-optimisation",
+      "participant_id": "P1",
+      "raw_notes": "P1 — Marketing Director, DTC skincare brand, 85 employees\n\nRuns campaigns on Meta, Google Shopping, TikTok, and programmatic via The Trade Desk. Team of 3 manages creative across all channels.\n\nDescribed last campaign launch (Q4 holiday push): Created 12 hero images and 6 video variants in Canva. Spent 'probably two full days' manually resizing and reformatting for each platform's specs. 'It's the most tedious part of my week, honestly.' Used a spreadsheet to track which creative ran where.\n\nNo cross-channel performance view. Checks each platform's native dashboard separately. 'By the time I've looked at Meta, checked Google, opened TTD... the day's gone.' Estimates 8-10 hours per week just on creative management across channels.\n\nWhen asked about underperformance: A Meta carousel 'tanked' but the same imagery performed well on Google Shopping. Took 4 days to notice because Meta reporting lag and manual checking. 'If I'd caught it day one, I could've shifted budget. Instead we burned through about $3K on a dud.'\n\nCurrently pays for Canva Pro ($30/mo team), plus each platform's built-in tools. Would 'definitely consider' a dedicated tool but concerned about adding 'yet another dashboard.' Mentioned budget approval would need to come from CFO for anything above $500/mo."
+    },
+    {
+      "id": "SES2",
+      "study_id": "adtech-creative-optimisation",
+      "participant_id": "P2",
+      "raw_notes": "P2 — Media Buyer, performance marketing agency, handles 8 client accounts\n\nSkeptical from the start. 'We've seen a dozen tools promise cross-channel creative insights. Most of them can barely pull accurate data from one platform, let alone four.'\n\nUses platform-native tools exclusively. 'I trust Meta's reporting for Meta, Google's for Google. The moment you aggregate, you introduce attribution errors.' Cited a specific example: a client tried a cross-channel tool last year that double-counted conversions and led to wrong budget allocation.\n\nDoesn't see creative adaptation as a major pain point for HIS workflow. 'My job is buying, not making creatives. The creative team handles production. I just tell them what's working and what's not.' The handoff between media buying and creative production is where things slow down — 'I flag a winner on Slack, creative team takes 2-3 days to make variants.'\n\nWhen pressed on whether a tool could speed up that handoff: 'Maybe. But you'd need buy-in from the creative team too, and they're protective of their process. They don't want an algorithm telling them what looks good.'\n\nOn pricing: 'Agency margins are thin. We're not paying $2K/mo per client for something we're not sure works. Maybe $200-300/mo if it genuinely saved us an hour a day per account. But prove it first.'\n\nOn AI recommendations: 'I've tested AI creative tools. The suggestions are generic — increase contrast, use brighter colors, add urgency. Nothing I couldn't tell a junior in five minutes.'"
+    },
+    {
+      "id": "SES3",
+      "study_id": "adtech-creative-optimisation",
+      "participant_id": "P3",
+      "raw_notes": "P3 — Creative Operations Lead, e-commerce fashion retailer, 200 employees\n\nManages production of 200+ creative assets per month across Meta, Google, Pinterest, TikTok, and programmatic. Team of 5 designers plus 2 production coordinators.\n\nHas built extensive internal workarounds: a Notion database tracking every asset, which channels it's been deployed to, and performance notes pulled manually each Monday. 'It's held together with duct tape and good intentions.' The Monday performance review takes one person's full morning — 4 hours of pulling data from each platform and updating the tracker.\n\nDescribed a workflow gap: designs are created in Figma, exported, then manually uploaded to each platform with platform-specific adjustments (aspect ratios, text overlay rules, safe zones). 'We lose at least a day per campaign just on the mechanical reformatting. The creative thinking takes an afternoon — the logistics take a week.'\n\nWhen asked about existing tools: tried Celtra for automated creative production 18 months ago. 'The templating worked but the performance insights were garbage. It couldn't tell us anything we didn't already know from the platform dashboards.' Cancelled after 6 months at $1,800/mo.\n\nWould pay for a tool that genuinely connected performance data to creative decisions: 'If you could show me that this color palette outperforms that one on TikTok but not on Meta — with real data, not AI hallucinations — I'd pay $1,500/mo tomorrow.' But needs to see proof: 'Demo it with our actual data for a month. If it works, we'll buy it.'\n\nOn AI trust: 'I trust AI for production tasks — resizing, reformatting, generating variants from a template. I do NOT trust AI for creative judgment. Don't tell my designers an algorithm thinks their work is bad.'"
+    },
+    {
+      "id": "SES4",
+      "study_id": "adtech-creative-optimisation",
+      "participant_id": "P4",
+      "raw_notes": "P4 — Growth Marketer, B2B SaaS company, 120 employees\n\nMinimal creative resources. No dedicated designer — uses Canva templates and occasionally contracts a freelance designer for bigger campaigns. Runs ads primarily on LinkedIn, Google Search, and some Meta retargeting.\n\nCreative adaptation isn't a major pain point because creative variety is low: 'Honestly, we run maybe 5-6 ad variants at a time. I can manage that in a spreadsheet. My bigger problem is knowing which MESSAGE resonates, not which IMAGE performs.'\n\nDoesn't currently track creative performance at the asset level. Looks at campaign-level metrics (CAC, pipeline generated, demo requests) and attributes roughly. 'Creative is one variable among many — the landing page, the audience, the bidding strategy. I can't isolate creative impact and I'm not sure anyone can reliably.'\n\nWhen asked about cross-channel: 'LinkedIn and Google are such different beasts that the same creative never runs on both. We design specifically for each. So cross-channel optimisation doesn't really apply to us.'\n\nOn pricing: 'For our stage and ad spend (~$30K/mo), I can't justify a creative tool above $300/mo. And it would need to help with messaging, not just visual optimisation.'\n\nInteresting signal: mentioned that the SALES team has strong opinions on which ad creative drives better leads. 'Our AEs tell me certain ad styles bring in tyre-kickers vs. serious buyers. But I have no way to connect that feedback loop to the creative production.'"
+    },
+    {
+      "id": "SES5",
+      "study_id": "adtech-creative-optimisation",
+      "participant_id": "P5",
+      "raw_notes": "P5 — Brand Manager, consumer packaged goods company, 350 employees\n\nPrimary concern is brand consistency, not performance optimisation. 'Every time someone suggests automating creative, I break out in hives. We spent two years building brand guidelines that are finally consistent. An AI that starts changing headlines and colors to optimise clicks could undo all of that.'\n\nDescribed a past incident: a performance marketing team at a previous company used dynamic creative optimisation (DCO) on Meta. 'It started A/B testing headline variants that were technically higher-performing but completely off-brand. One ad said something like BUY NOW MEGA SALE which... we're a premium brand. That can't happen.'\n\nWhen asked about the time spent on creative management: 'We have a process and it works. Yes, reformatting takes time, but our agency handles the production. My concern is the QUALITY and CONSISTENCY of what goes out, not the speed.'\n\nOn cross-channel performance tracking: does work with a media agency that provides monthly cross-channel reports. 'I get a deck every month. It's always 3 weeks late and tells me things I can't act on anymore. But at least it's auditable and I can show it to my VP.'\n\nWould consider a tool IF it had strong brand guardrails: 'If you could guarantee that no creative goes live without matching our brand guidelines — color codes, font usage, tone of voice, exclusion zones — then maybe. But the moment the AI starts freelancing, I'm out.'\n\nOn willingness to pay: 'Our agency fees already cover creative production and reporting. I'm not adding another vendor unless it replaces something. What would this replace?'\n\nInteresting friction: revealed that brand compliance review adds 2-3 days to every campaign launch. 'Every asset gets reviewed by me and our legal team. If your tool could pre-check compliance, THAT would save time. The creative optimisation bit I could take or leave.'"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+# CDK output — large and not needed in the image
+infrastructure/cdk.out/
+infrastructure/.venv/
+infrastructure/node_modules/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Development tools
+.git/
+.gitignore
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Docs and scripts (not needed at runtime)
+docs/
+scripts/
+
+# Local config
+.env
+.env.*
+*.env
+
+# IDE
+.vscode/
+.idea/
