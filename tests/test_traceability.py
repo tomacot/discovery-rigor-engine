@@ -37,11 +37,36 @@ def sessions() -> list[Session]:
 @pytest.fixture
 def observations(sessions) -> list[Observation]:
     return [
-        Observation(id="obs-1", session_id="ses-1", type="behaviour", content="P1 manually resizes"),
-        Observation(id="obs-2", session_id="ses-1", type="statement", content="'I duplicate the campaign'"),
-        Observation(id="obs-3", session_id="ses-2", type="behaviour", content="P2 uses spreadsheet"),
-        Observation(id="obs-4", session_id="ses-2", type="context", content="Team of 3 designers"),
-        Observation(id="obs-5", session_id="ses-3", type="statement", content="'No time for A/B testing'"),
+        Observation(
+            id="obs-1",
+            session_id="ses-1",
+            type="behaviour",
+            content="P1 manually resizes",
+        ),
+        Observation(
+            id="obs-2",
+            session_id="ses-1",
+            type="statement",
+            content="'I duplicate the campaign'",
+        ),
+        Observation(
+            id="obs-3",
+            session_id="ses-2",
+            type="behaviour",
+            content="P2 uses spreadsheet",
+        ),
+        Observation(
+            id="obs-4",
+            session_id="ses-2",
+            type="context",
+            content="Team of 3 designers",
+        ),
+        Observation(
+            id="obs-5",
+            session_id="ses-3",
+            type="statement",
+            content="'No time for A/B testing'",
+        ),
     ]
 
 
@@ -246,7 +271,9 @@ class TestFullChainTraversal:
     This mirrors what the /check-traceability command does at runtime.
     """
 
-    def test_chain_walk_succeeds(self, decision_record, insights, themes, observations, sessions):
+    def test_chain_walk_succeeds(
+        self, decision_record, insights, themes, observations, sessions
+    ):
         theme_by_id = {t.id: t for t in themes}
         obs_by_id = {o.id: o for o in observations}
         session_by_id = {s.id: s for s in sessions}
@@ -257,15 +284,23 @@ class TestFullChainTraversal:
             for theme_id in insight.theme_ids:
                 theme = theme_by_id.get(theme_id)
                 if not theme:
-                    broken_links.append(f"Insight {insight.id} → missing theme {theme_id}")
+                    broken_links.append(
+                        f"Insight {insight.id} → missing theme {theme_id}"
+                    )
                     continue
                 for obs_id in theme.observation_ids:
                     obs = obs_by_id.get(obs_id)
                     if not obs:
-                        broken_links.append(f"Theme {theme.id} → missing observation {obs_id}")
+                        broken_links.append(
+                            f"Theme {theme.id} → missing observation {obs_id}"
+                        )
                         continue
                     session = session_by_id.get(obs.session_id)
                     if not session:
-                        broken_links.append(f"Observation {obs.id} → missing session {obs.session_id}")
+                        broken_links.append(
+                            f"Observation {obs.id} → missing session {obs.session_id}"
+                        )
 
-        assert not broken_links, "Broken links in evidence chain:\n" + "\n".join(broken_links)
+        assert not broken_links, "Broken links in evidence chain:\n" + "\n".join(
+            broken_links
+        )

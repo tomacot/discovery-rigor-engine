@@ -22,6 +22,7 @@ page = st.sidebar.radio(
     "Navigate",
     options=["Home", "Assumption Map", "Script Review", "Synthesis"],
     index=0,
+    key="sidebar_nav",
 )
 
 # Route to the selected page

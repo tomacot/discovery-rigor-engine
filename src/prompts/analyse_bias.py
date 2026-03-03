@@ -34,8 +34,12 @@ class BiasAnalysis(BaseModel):
     """Bias analysis result for a single interview question."""
 
     verdict: str  # pass | warning | rewrite_needed
-    issue_types: list[str]  # subset of: leading, hypothetical, solution_selling, closed, double_barrelled
-    explanation: str  # Plain-language explanation of the problem (or confirmation it's clean)
+    issue_types: list[
+        str
+    ]  # subset of: leading, hypothetical, solution_selling, closed, double_barrelled
+    explanation: (
+        str  # Plain-language explanation of the problem (or confirmation it's clean)
+    )
 
 
 def get_analyse_bias_prompt(question: str) -> str:

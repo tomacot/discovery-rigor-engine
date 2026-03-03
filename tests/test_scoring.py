@@ -68,7 +68,9 @@ class TestComputeRiskScore:
 # ── Confidence score ───────────────────────────────────────────────────────────
 
 
-def _make_insight(strength: str, theme_ids: list[str], assumption_status: str = "uncertain") -> Insight:
+def _make_insight(
+    strength: str, theme_ids: list[str], assumption_status: str = "uncertain"
+) -> Insight:
     """Helper to construct a minimal Insight for testing."""
     return Insight(
         id="i1",
@@ -166,7 +168,7 @@ class TestComputeConfidenceScore:
         """high + low = mean 0.65 → evidence_strength component = 0.65."""
         insights = [
             _make_insight("high", ["t1"]),  # 1.0
-            _make_insight("low", ["t2"]),   # 0.3
+            _make_insight("low", ["t2"]),  # 0.3
         ]
         themes = [_make_theme(2), _make_theme(2)]
         _, breakdown = compute_confidence_score(insights, themes, 4, 2)

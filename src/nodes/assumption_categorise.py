@@ -33,8 +33,7 @@ def categorise_risk_lens(state: StudyState) -> dict:
     }
 
     updated = [
-        replace(a, risk_lens=lens_lookup.get(a.id, "desirability"))
-        for a in assumptions
+        replace(a, risk_lens=lens_lookup.get(a.id, "desirability")) for a in assumptions
     ]
 
     return {"assumptions": updated}

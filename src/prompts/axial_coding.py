@@ -44,9 +44,15 @@ class ThemeDraft(BaseModel):
     label: str  # Short theme name (3-6 words)
     description: str  # What this theme represents (1-2 sentences)
     observation_indices: list[int]  # 0-indexed positions in the observations list
-    session_ids: list[str]  # Which sessions support this theme (must be ≥2 unique sessions)
-    counterevidence: str  # Observations that contradict or complicate this theme, or "none found"
-    assumption_id: Optional[str] = None  # Which assumption this theme most directly addresses
+    session_ids: list[
+        str
+    ]  # Which sessions support this theme (must be ≥2 unique sessions)
+    counterevidence: (
+        str  # Observations that contradict or complicate this theme, or "none found"
+    )
+    assumption_id: Optional[str] = (
+        None  # Which assumption this theme most directly addresses
+    )
 
 
 class AxialCodingResult(BaseModel):
@@ -69,9 +75,7 @@ def get_axial_coding_prompt(
         for o in observations
     )
 
-    assumption_lines = "\n".join(
-        f"- {a['id']}: {a['statement']}" for a in assumptions
-    )
+    assumption_lines = "\n".join(f"- {a['id']}: {a['statement']}" for a in assumptions)
 
     return f"""You are performing axial coding on observations collected across multiple user research sessions.
 

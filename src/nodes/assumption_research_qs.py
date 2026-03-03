@@ -36,7 +36,9 @@ def generate_research_questions(state: StudyState) -> dict:
         prompt, ResearchQuestions, RESEARCH_QS_SYSTEM
     )
 
-    question_lookup: dict[str, str] = {q.assumption_id: q.question for q in result.questions}
+    question_lookup: dict[str, str] = {
+        q.assumption_id: q.question for q in result.questions
+    }
 
     updated = [
         replace(a, research_question=question_lookup[a.id])

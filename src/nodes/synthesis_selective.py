@@ -24,11 +24,7 @@ def _draft_to_insight(
     themes: list[Theme],
 ) -> Insight:
     """Convert an InsightDraft Pydantic model into an Insight dataclass."""
-    theme_ids = [
-        themes[idx].id
-        for idx in draft.theme_indices
-        if idx < len(themes)
-    ]
+    theme_ids = [themes[idx].id for idx in draft.theme_indices if idx < len(themes)]
     return Insight(
         id=f"INS{index + 1}",
         study_id=study_id,
@@ -56,7 +52,12 @@ def selective_coding(state: StudyState) -> dict:
     assumptions: list[Assumption] = state["assumptions"]
 
     theme_dicts = [
-        {"index": i, "label": t.label, "description": t.description, "counterevidence": t.counterevidence}
+        {
+            "index": i,
+            "label": t.label,
+            "description": t.description,
+            "counterevidence": t.counterevidence,
+        }
         for i, t in enumerate(themes)
     ]
     assumption_dicts = [
@@ -64,7 +65,9 @@ def selective_coding(state: StudyState) -> dict:
         for a in assumptions
     ]
 
-    prompt = get_selective_coding_prompt(theme_dicts, assumption_dicts, state["hypothesis"])
+    prompt = get_selective_coding_prompt(
+        theme_dicts, assumption_dicts, state["hypothesis"]
+    )
     result: SelectiveCodingResult = call_llm_structured(
         prompt, SelectiveCodingResult, SELECTIVE_CODING_SYSTEM
     )

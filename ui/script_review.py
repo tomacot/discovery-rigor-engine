@@ -96,7 +96,9 @@ def _require_study() -> StudyState | None:
     """Return current state or show an error if no study is loaded."""
     state = st.session_state.get("current_state")
     if not state:
-        st.warning("No study loaded. Go to Home and load the sample study or create a new one.")
+        st.warning(
+            "No study loaded. Go to Home and load the sample study or create a new one."
+        )
         return None
     return state
 
@@ -117,7 +119,9 @@ def _latest_script(state: StudyState):
 
 def _is_reviewed(script) -> bool:
     """Return True if the script has been through bias analysis."""
-    return bool(script and script.questions and any(q.verdict for q in script.questions))
+    return bool(
+        script and script.questions and any(q.verdict for q in script.questions)
+    )
 
 
 def render() -> None:
@@ -172,6 +176,7 @@ def render() -> None:
         "Script text",
         value=default_text,
         height=300,
+        max_chars=5000,
         placeholder=(
             "1. Tell me about your current creative workflow...\n"
             "2. How often do you run A/B tests on ad creative?\n"
@@ -242,3 +247,11 @@ def _render_results(script: Script) -> None:
             height=300,
             disabled=True,
         )
+
+    st.divider()
+    st.info(
+        "**Next step:** Run synthesis after your interviews to extract themes and insights."
+    )
+    if st.button("Go to Synthesis →", key="nav_script_to_synthesis"):
+        st.session_state["sidebar_nav"] = "Synthesis"
+        st.rerun()

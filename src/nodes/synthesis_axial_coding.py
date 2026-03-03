@@ -30,7 +30,13 @@ def _draft_to_theme(
         if idx < len(observations)
     ]
     session_count = len(set(draft.session_ids))
-    confidence = "strong" if session_count >= 3 else "moderate" if session_count >= 2 else "emerging"
+    confidence = (
+        "strong"
+        if session_count >= 3
+        else "moderate"
+        if session_count >= 2
+        else "emerging"
+    )
 
     return Theme(
         id=f"T{index + 1}",
@@ -51,7 +57,12 @@ def axial_coding(state: StudyState) -> dict:
     assumptions: list[Assumption] = state["assumptions"]
 
     obs_dicts = [
-        {"index": i, "session_id": obs.session_id, "type": obs.type, "content": obs.content}
+        {
+            "index": i,
+            "session_id": obs.session_id,
+            "type": obs.type,
+            "content": obs.content,
+        }
         for i, obs in enumerate(observations)
     ]
     assumption_dicts = [{"id": a.id, "statement": a.statement} for a in assumptions]

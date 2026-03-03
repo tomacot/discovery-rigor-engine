@@ -52,7 +52,9 @@ def _require_study() -> StudyState | None:
     """Return current state or show an error if no study is loaded."""
     state = st.session_state.get("current_state")
     if not state:
-        st.warning("No study loaded. Go to Home and load the sample study or create a new one.")
+        st.warning(
+            "No study loaded. Go to Home and load the sample study or create a new one."
+        )
         return None
     return state
 
@@ -172,7 +174,9 @@ def render() -> None:
                 for f in uploaded_files
             ]
             st.table(preview)
-            if st.button(f"Import {len(uploaded_files)} session(s) from files", type="primary"):
+            if st.button(
+                f"Import {len(uploaded_files)} session(s) from files", type="primary"
+            ):
                 new_sessions = []
                 for f in uploaded_files:
                     new_sessions.append(
@@ -197,6 +201,7 @@ def render() -> None:
         raw_notes = st.text_area(
             "Raw interview notes",
             height=350,
+            max_chars=10000,
             placeholder=(
                 "Key quotes, observations, and behaviours from the session.\n\n"
                 "Example:\n"
@@ -248,7 +253,9 @@ def _render_results(state: StudyState) -> None:
     """Render the full synthesis output across three tabs: Decision, Insights, Evidence Chain."""
     dr = state["decision_record"]
 
-    tab_decision, tab_insights, tab_evidence = st.tabs(["Decision", "Insights", "Evidence Chain"])
+    tab_decision, tab_insights, tab_evidence = st.tabs(
+        ["Decision", "Insights", "Evidence Chain"]
+    )
 
     # ── Tab 1: Decision ────────────────────────────────────────────────────────
     with tab_decision:
@@ -282,6 +289,14 @@ def _render_results(state: StudyState) -> None:
         help="Full decision record with insights, themes, and next steps as a Markdown document.",
     )
 
+    st.divider()
+    st.info(
+        "**Done:** Export your decision record above, or start a new study from the home page."
+    )
+    if st.button("Go to Home →", key="nav_synthesis_to_home"):
+        st.session_state["sidebar_nav"] = "Home"
+        st.rerun()
+
 
 def _render_decision_tab(dr) -> None:
     """Render the decision record: recommendation, evidence summary, next steps."""
@@ -291,7 +306,9 @@ def _render_decision_tab(dr) -> None:
         "park": ("🔴", "Park"),
         "need_more_evidence": ("🔵", "Need more evidence"),
     }
-    emoji, label = recommendation_config.get(dr.recommendation, ("❓", dr.recommendation))
+    emoji, label = recommendation_config.get(
+        dr.recommendation, ("❓", dr.recommendation)
+    )
 
     col1, col2 = st.columns([1, 3])
     with col1:
@@ -309,7 +326,9 @@ def _render_decision_tab(dr) -> None:
                 "counterevidence coverage, and session diversity."
             )
             for component, value in dr.confidence_breakdown.items():
-                st.markdown(f"- **{component.replace('_', ' ').title()}:** `{value:.2f}`")
+                st.markdown(
+                    f"- **{component.replace('_', ' ').title()}:** `{value:.2f}`"
+                )
 
     if dr.segment_specific_insights:
         st.markdown("#### Segment-Specific Insights")
@@ -332,7 +351,9 @@ def _render_decision_tab(dr) -> None:
         col3.markdown("**Long-term (future strategy)**")
         col3.markdown(dr.next_steps_long_term)
     # Fall back to legacy field if new fields are empty
-    if not any([dr.next_steps_immediate, dr.next_steps_short_term, dr.next_steps_long_term]):
+    if not any(
+        [dr.next_steps_immediate, dr.next_steps_short_term, dr.next_steps_long_term]
+    ):
         if dr.next_steps:
             st.markdown(dr.next_steps)
 
@@ -353,7 +374,9 @@ def _render_insights_tab(state: StudyState) -> None:
         st.info("No insights generated yet.")
         return
 
-    st.markdown(f"**{len(insights)} insight(s) from {len(state['sessions'])} sessions**")
+    st.markdown(
+        f"**{len(insights)} insight(s) from {len(state['sessions'])} sessions**"
+    )
 
     for insight in insights:
         strength_colour = {"high": "green", "medium": "orange", "low": "red"}.get(
@@ -400,9 +423,13 @@ def _render_insights_tab(state: StudyState) -> None:
 
             col1, col2 = st.columns(2)
             if insight.user_segments_affected:
-                col1.markdown(f"**Segments affected:**  \n{insight.user_segments_affected}")
+                col1.markdown(
+                    f"**Segments affected:**  \n{insight.user_segments_affected}"
+                )
             if insight.current_workarounds:
-                col2.markdown(f"**Current workarounds:**  \n{insight.current_workarounds}")
+                col2.markdown(
+                    f"**Current workarounds:**  \n{insight.current_workarounds}"
+                )
 
             if insight.potential_solutions:
                 st.markdown("**Potential directions to explore:**")

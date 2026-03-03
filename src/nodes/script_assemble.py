@@ -25,9 +25,7 @@ def assemble_clean_script(state: StudyState) -> dict:
     script: Script = state["scripts"][0]
     questions = script.questions
 
-    numbered_lines = [
-        f"{i + 1}. {_clean_text_for(q)}" for i, q in enumerate(questions)
-    ]
+    numbered_lines = [f"{i + 1}. {_clean_text_for(q)}" for i, q in enumerate(questions)]
     clean_text = "\n".join(numbered_lines)
 
     pass_count = sum(1 for q in questions if q.verdict == "pass")

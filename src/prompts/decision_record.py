@@ -56,7 +56,9 @@ class DecisionNarrative(BaseModel):
     descoped_items: str  # Assumptions not addressed and why they matter
     remaining_risks: str  # What could still be wrong, despite the evidence
     next_steps: str  # Legacy field — kept for backward compat with loaded fixtures
-    contradictions_and_open_questions: str  # Where users disagreed; what this research can't yet answer
+    contradictions_and_open_questions: (
+        str  # Where users disagreed; what this research can't yet answer
+    )
     what_not_to_do: str  # Ideas or directions invalidated by the research
     next_steps_immediate: str  # Actions to take now (with suggested owners)
     next_steps_short_term: str  # Next-quarter validation, exploration, or experiments

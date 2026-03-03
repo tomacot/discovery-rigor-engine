@@ -11,6 +11,13 @@ import streamlit as st
 
 from src.state import Assumption, Insight, Observation, ScriptQuestion, Session, Theme
 
+RISK_LENS_EXPLANATIONS: dict[str, str] = {
+    "desirability": "Does anyone want this? Tests whether the problem is real and whether users would adopt a solution.",
+    "usability": "Can users figure it out? Tests whether the interaction or workflow is intuitive without friction.",
+    "feasibility": "Can we build it? Tests technical, operational, or resource constraints on delivering this.",
+    "viability": "Should we build it? Tests business model, pricing, revenue, or strategic fit.",
+}
+
 
 def render_assumption_matrix(assumptions: list[Assumption]) -> None:
     """Render assumptions as a sortable table with risk-level colour coding."""
@@ -19,7 +26,9 @@ def render_assumption_matrix(assumptions: list[Assumption]) -> None:
 
     st.markdown("#### Assumption Risk Rankings")
     for a in sorted(assumptions, key=lambda x: x.risk_score, reverse=True):
-        risk_emoji = "🔴" if a.risk_score >= 20 else "🟡" if a.risk_score >= 12 else "🟢"
+        risk_emoji = (
+            "🔴" if a.risk_score >= 20 else "🟡" if a.risk_score >= 12 else "🟢"
+        )
         lens_colour = {
             "desirability": "blue",
             "usability": "orange",
@@ -47,7 +56,9 @@ def render_bias_verdict_card(question: ScriptQuestion, index: int) -> None:
     }
     emoji, label = verdict_config.get(question.verdict, ("❓", "Pending"))
     expand = question.verdict == "rewrite_needed"
-    preview = question.original_text[:80] + ("…" if len(question.original_text) > 80 else "")
+    preview = question.original_text[:80] + (
+        "…" if len(question.original_text) > 80 else ""
+    )
 
     with st.expander(f"{emoji} Q{index + 1}: {preview}", expanded=expand):
         st.markdown(f"**Original:** {question.original_text}")
@@ -92,10 +103,14 @@ def render_evidence_chain(
         with st.expander(f"💡 {insight.statement}", expanded=False):
             col1, col2 = st.columns([1, 3])
             with col1:
-                strength_colour = {"high": "green", "medium": "orange", "low": "red"}.get(
-                    insight.evidence_strength, "grey"
+                strength_colour = {
+                    "high": "green",
+                    "medium": "orange",
+                    "low": "red",
+                }.get(insight.evidence_strength, "grey")
+                st.markdown(
+                    f":{strength_colour}[**{insight.evidence_strength.upper()} evidence**]"
                 )
-                st.markdown(f":{strength_colour}[**{insight.evidence_strength.upper()} evidence**]")
                 if insight.priority:
                     priority_colour = {
                         "critical": "red",
@@ -136,7 +151,10 @@ def render_evidence_chain(
                         expanded=False,
                     ):
                         st.markdown(theme.description)
-                        if theme.counterevidence and theme.counterevidence.lower() != "none found":
+                        if (
+                            theme.counterevidence
+                            and theme.counterevidence.lower() != "none found"
+                        ):
                             st.caption(f"Counterevidence: {theme.counterevidence}")
 
                         # Level 3 — Observations + optional session excerpt
@@ -145,7 +163,9 @@ def render_evidence_chain(
                             if not obs:
                                 continue
 
-                            obs_preview = obs.content[:100] + ("…" if len(obs.content) > 100 else "")
+                            obs_preview = obs.content[:100] + (
+                                "…" if len(obs.content) > 100 else ""
+                            )
                             with st.expander(
                                 f"📋 [{obs.type}] {obs_preview}",
                                 expanded=False,
@@ -163,5 +183,7 @@ def render_evidence_chain(
                                     ):
                                         excerpt = session.raw_notes[:800]
                                         if len(session.raw_notes) > 800:
-                                            excerpt += "\n\n_[truncated — 800 chars shown]_"
+                                            excerpt += (
+                                                "\n\n_[truncated — 800 chars shown]_"
+                                            )
                                         st.text(excerpt)

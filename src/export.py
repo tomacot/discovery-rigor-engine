@@ -37,9 +37,12 @@ def format_decision_record_md(state: StudyState) -> str:
     study_id = state["study_id"]
     hypothesis = state["hypothesis"]
 
-    rec_emoji = {"pursue": "🟢", "pivot": "🟡", "park": "🔴", "need_more_evidence": "🔵"}.get(
-        dr.recommendation, "❓"
-    )
+    rec_emoji = {
+        "pursue": "🟢",
+        "pivot": "🟡",
+        "park": "🔴",
+        "need_more_evidence": "🔵",
+    }.get(dr.recommendation, "❓")
     rec_label = {
         "pursue": "PURSUE",
         "pivot": "PIVOT",
@@ -102,7 +105,9 @@ def format_decision_record_md(state: StudyState) -> str:
             if ins.frequency:
                 lines.append(f"**Frequency:** {ins.frequency}  ")
             lines.append(f"**Assumption status:** {status_label}  ")
-            lines.append(f"**Priority:** `{ins.priority}` | **Actionability:** `{ins.actionability}`")
+            lines.append(
+                f"**Priority:** `{ins.priority}` | **Actionability:** `{ins.actionability}`"
+            )
             lines.append("")
 
             if ins.why_it_matters:
@@ -115,7 +120,9 @@ def format_decision_record_md(state: StudyState) -> str:
                 lines.append("")
 
             if ins.user_segments_affected:
-                lines.append(f"**User segments affected:** {ins.user_segments_affected}  ")
+                lines.append(
+                    f"**User segments affected:** {ins.user_segments_affected}  "
+                )
             if ins.current_workarounds:
                 lines.append(f"**Current workarounds:** {ins.current_workarounds}  ")
 
@@ -205,7 +212,11 @@ def format_research_script_md(state: StudyState) -> str:
         lines += [f"### {lens.capitalize()} Assumptions", ""]
         for a in group:
             risk_tag = (
-                "HIGH RISK" if a.risk_score >= 20 else "MEDIUM RISK" if a.risk_score >= 12 else "LOW RISK"
+                "HIGH RISK"
+                if a.risk_score >= 20
+                else "MEDIUM RISK"
+                if a.risk_score >= 12
+                else "LOW RISK"
             )
             lines += [
                 f"**{a.statement}**  ",

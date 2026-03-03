@@ -14,7 +14,7 @@ import uuid
 import streamlit as st
 
 from src.graph import build_graph
-from src.store import StudyStore
+from src.store import get_store
 
 SAMPLE_STUDIES = {
     "Creative Asset Optimisation (AdTech)": "adtech_study",
@@ -29,7 +29,7 @@ SAMPLE_STUDIES = {
 def _init_session() -> None:
     """Initialise store and compiled graph in session_state if not already done."""
     if "store" not in st.session_state:
-        st.session_state.store = StudyStore()
+        st.session_state.store = get_store()
     if "graph" not in st.session_state:
         st.session_state.graph = build_graph()
     if "current_state" not in st.session_state:
@@ -60,7 +60,7 @@ def render() -> None:
         label_visibility="collapsed",
     )
     if st.button("Load Sample Study", type="primary", use_container_width=True):
-        store: StudyStore = st.session_state.store
+        store = st.session_state.store
         fixture_name = SAMPLE_STUDIES[selected_label]
         state = store.load_fixture(fixture_name)
         st.session_state.current_state = state
@@ -68,7 +68,9 @@ def render() -> None:
             f"Loaded **{selected_label}** — "
             f"{len(state['assumptions'])} assumptions, {len(state['sessions'])} sessions."
         )
-        st.info("Navigate to Assumption Map, Script Review, or Synthesis in the sidebar.")
+        st.info(
+            "Navigate to Assumption Map, Script Review, or Synthesis in the sidebar."
+        )
 
     st.divider()
 
@@ -85,6 +87,7 @@ def render() -> None:
             "Hypothesis",
             placeholder="We believe that [target user] struggle with [problem] because [reason]...",
             height=100,
+            max_chars=2000,
         )
         if st.button("Create New Study", use_container_width=True):
             if not hypothesis.strip():
@@ -119,7 +122,9 @@ def render() -> None:
                     f"Uploaded **{state['study_id']}** — "
                     f"{len(state['assumptions'])} assumptions, {len(state['sessions'])} sessions."
                 )
-                st.info("Navigate to Assumption Map, Script Review, or Synthesis in the sidebar.")
+                st.info(
+                    "Navigate to Assumption Map, Script Review, or Synthesis in the sidebar."
+                )
             except (json.JSONDecodeError, KeyError) as e:
                 st.error(f"Could not parse JSON file: {e}")
 

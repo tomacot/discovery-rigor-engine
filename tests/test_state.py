@@ -91,7 +91,9 @@ class TestGetAndSaveStudy:
     def test_save_updates_assumptions(self):
         store = StudyStore()
         state = store.create_study("s3", "h")
-        assumption = Assumption(id="a1", statement="Users need X", risk_lens="desirability")
+        assumption = Assumption(
+            id="a1", statement="Users need X", risk_lens="desirability"
+        )
         state["assumptions"] = [assumption]
         store.save_study(state)
         retrieved = store.get_study("s3")
@@ -187,7 +189,9 @@ class TestDomainDataclasses:
         assert s.questions == []
 
     def test_session_fields(self):
-        s = Session(id="ses1", study_id="study-1", participant_id="P1", raw_notes="Notes")
+        s = Session(
+            id="ses1", study_id="study-1", participant_id="P1", raw_notes="Notes"
+        )
         assert s.participant_id == "P1"
         assert s.raw_notes == "Notes"
 

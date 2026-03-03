@@ -70,7 +70,7 @@ def compute_confidence_score(
     ) / len(themes)
 
     # Session diversity: proportion of sessions referenced across all observations
-    referenced_sessions = set()
+    referenced_sessions: set[int] = set()
     for theme in themes:
         # Session count is tracked on the theme
         referenced_sessions.update(range(theme.session_count))

@@ -58,7 +58,9 @@ class InsightDraft(BaseModel):
     evidence_strength: str  # high | medium | low
     theme_indices: list[int]  # 0-indexed positions in the themes list
     counterevidence: str  # What complicates or limits this insight
-    implication: str  # What this means for the product decision (not the decision itself)
+    implication: (
+        str  # What this means for the product decision (not the decision itself)
+    )
     assumption_id: Optional[str] = None  # Which assumption this insight addresses
     assumption_status: str  # confirmed | challenged | uncertain
     # Synthesis.txt enrichment
@@ -67,7 +69,9 @@ class InsightDraft(BaseModel):
     why_it_matters: str  # Business/UX/strategy impact of this finding
     user_segments_affected: str  # Which participant types care most about this
     current_workarounds: str  # How users solve this problem today (if at all)
-    potential_solutions: list[str]  # 2-3 directions to explore (not prescriptive features)
+    potential_solutions: list[
+        str
+    ]  # 2-3 directions to explore (not prescriptive features)
     actionability: str  # clear | fuzzy | needs_more_research
     priority: str  # critical | high | medium | low
 

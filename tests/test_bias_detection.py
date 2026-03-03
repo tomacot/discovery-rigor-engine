@@ -130,7 +130,9 @@ class TestScriptAssemble:
         assert result["scripts"][0].bias_score == 1.0
 
     def test_all_rewrite_gives_score_0(self):
-        state = self._state_with_verdicts("1. Q1\n2. Q2", ["rewrite_needed", "rewrite_needed"])
+        state = self._state_with_verdicts(
+            "1. Q1\n2. Q2", ["rewrite_needed", "rewrite_needed"]
+        )
         result = assemble_clean_script(state)
         assert result["scripts"][0].bias_score == 0.0
 
@@ -299,7 +301,7 @@ class TestBiasDetectionAccuracy:
 
     def test_false_positive_rate_below_20_percent(self, analysed_results):
         """≤20% of known-clean questions should be incorrectly flagged."""
-        clean_verdicts = analysed_results[len(KNOWN_BIASED_QUESTIONS):]
+        clean_verdicts = analysed_results[len(KNOWN_BIASED_QUESTIONS) :]
         false_flagged = sum(1 for q in clean_verdicts if q.verdict != "pass")
         fp_rate = false_flagged / len(KNOWN_CLEAN_QUESTIONS)
         assert fp_rate <= 0.20, (

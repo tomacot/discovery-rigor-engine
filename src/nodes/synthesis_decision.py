@@ -43,11 +43,12 @@ def decision_record_node(state: StudyState) -> dict:
         for ins in insights
     ]
     assumption_dicts = [
-        {"id": a.id, "statement": a.statement, "status": a.status}
-        for a in assumptions
+        {"id": a.id, "statement": a.statement, "status": a.status} for a in assumptions
     ]
 
-    prompt = get_decision_record_prompt(insight_dicts, assumption_dicts, state["hypothesis"])
+    prompt = get_decision_record_prompt(
+        insight_dicts, assumption_dicts, state["hypothesis"]
+    )
     narrative: DecisionNarrative = call_llm_structured(
         prompt, DecisionNarrative, DECISION_RECORD_SYSTEM
     )

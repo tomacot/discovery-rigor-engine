@@ -15,6 +15,9 @@ Design choices:
   state across Streamlit reruns. The overhead is negligible.
 - Bedrock over Anthropic API: IAM-authenticated (no key to rotate), usage tracked
   in AWS Cost Explorer, consistent with the App Runner deployment architecture.
+- tenacity retry: handles Bedrock throttling and transient service errors with
+  exponential backoff (2s → 30s, 3 attempts). The inner schema-retry in
+  call_llm_structured handles LLM output validation failures separately.
 """
 
 from __future__ import annotations
@@ -22,10 +25,17 @@ from __future__ import annotations
 import os
 from typing import TypeVar
 
+from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 from langchain_aws import ChatBedrockConverse
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+)
 
 load_dotenv()
 
@@ -46,14 +56,23 @@ def _get_llm() -> ChatBedrockConverse:
     )
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=2, max=30),
+    retry=retry_if_exception_type((ClientError, TimeoutError)),
+    reraise=True,
+)
 def call_llm(prompt: str, system: str = "") -> str:
     """
     Send a prompt to the LLM and return the text response.
 
     Used for unstructured calls where the output is plain text
     (e.g., generating a decision record narrative).
+
+    Retries up to 3 times with exponential backoff on Bedrock throttling or
+    transient service errors. Raises after 3 failed attempts.
     """
-    messages = []
+    messages: list[SystemMessage | HumanMessage] = []
     if system:
         messages.append(SystemMessage(content=system))
     messages.append(HumanMessage(content=prompt))
@@ -62,6 +81,12 @@ def call_llm(prompt: str, system: str = "") -> str:
     return str(response.content)
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=2, max=30),
+    retry=retry_if_exception_type((ClientError, TimeoutError)),
+    reraise=True,
+)
 def call_llm_structured(prompt: str, response_model: type[T], system: str = "") -> T:
     """
     Send a prompt and parse the response into a Pydantic model.
@@ -74,10 +99,13 @@ def call_llm_structured(prompt: str, response_model: type[T], system: str = "") 
     data that downstream nodes depend on. Freeform JSON that doesn't match the
     expected schema would silently corrupt state. Tool-use enforces the contract.
 
-    Retries once on failure with a stricter system message. After two failures,
-    raises the error rather than passing corrupted data downstream.
+    Two retry layers:
+    - tenacity (@retry decorator): handles Bedrock infrastructure failures
+      (throttling, transient errors) with exponential backoff.
+    - Inner try/except: handles schema validation failures by retrying once
+      with a stricter system message. After both retries fail, raises the error.
     """
-    messages = []
+    messages: list[SystemMessage | HumanMessage] = []
     if system:
         messages.append(SystemMessage(content=system))
     messages.append(HumanMessage(content=prompt))
@@ -94,5 +122,8 @@ def call_llm_structured(prompt: str, response_model: type[T], system: str = "") 
             + "IMPORTANT: Your response MUST strictly follow the required schema. "
             "Do not include any fields not defined in the schema."
         )
-        retry_messages = [SystemMessage(content=strict_system), HumanMessage(content=prompt)]
+        retry_messages = [
+            SystemMessage(content=strict_system),
+            HumanMessage(content=prompt),
+        ]
         return structured_llm.invoke(retry_messages)  # type: ignore[return-value]

@@ -22,14 +22,16 @@ import streamlit as st
 
 from src.export import filename_for_research_script, format_research_script_md
 from src.state import Assumption, StudyState
-from ui.components import render_assumption_matrix
+from ui.components import RISK_LENS_EXPLANATIONS, render_assumption_matrix
 
 
 def _require_study() -> StudyState | None:
     """Return current state or show an error if no study is loaded."""
     state = st.session_state.get("current_state")
     if not state:
-        st.warning("No study loaded. Go to Home and load the sample study or create a new one.")
+        st.warning(
+            "No study loaded. Go to Home and load the sample study or create a new one."
+        )
         return None
     return state
 
@@ -103,11 +105,37 @@ def render() -> None:
                 if a.evidence_rationale:
                     col2.caption(f"ℹ️ {a.evidence_rationale}")
 
+                # More context: lens explanation + related assumptions (3C)
+                lens_explanation = RISK_LENS_EXPLANATIONS.get(a.risk_lens, "")
+                related = [
+                    x
+                    for x in state["assumptions"]
+                    if x.risk_lens == a.risk_lens and x.id != a.id
+                ]
+                if lens_explanation or related:
+                    with st.expander("More context", expanded=False):
+                        if lens_explanation:
+                            st.caption(
+                                f"**{a.risk_lens.title()} lens:** {lens_explanation}"
+                            )
+                        if related:
+                            related_labels = " · ".join(
+                                f"_{x.statement[:60]}..._"
+                                if len(x.statement) > 60
+                                else f"_{x.statement}_"
+                                for x in related
+                            )
+                            st.caption(
+                                f"**Related {a.risk_lens} assumptions:** {related_labels}"
+                            )
+
                 rated_assumptions.append(
                     replace(a, importance=importance, evidence_level=evidence)
                 )
 
-        if st.button("Calculate risk scores and generate research questions", type="primary"):
+        if st.button(
+            "Calculate risk scores and generate research questions", type="primary"
+        ):
             state["assumptions"] = rated_assumptions
             with st.spinner("Scoring assumptions and generating research questions…"):
                 state = _run_graph("assumption_mapping_phase2", state)
@@ -144,4 +172,12 @@ def render() -> None:
         state["assumptions"] = []
         state["assumption_map_complete"] = False
         st.session_state.current_state = state
+        st.rerun()
+
+    st.divider()
+    st.info(
+        "**Next step:** Review your interview script for bias before going into the field."
+    )
+    if st.button("Go to Script Review →", key="nav_assumption_to_script"):
+        st.session_state["sidebar_nav"] = "Script Review"
         st.rerun()

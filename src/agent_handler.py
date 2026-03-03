@@ -57,10 +57,14 @@ def handler(input: dict, context: dict) -> dict:
     if not raw_state:
         raise ValueError("'study_state' is required in handler input")
 
-    logger.info("AgentCore handler invoked: flow=%s study_id=%s", flow, raw_state.get("study_id"))
+    logger.info(
+        "AgentCore handler invoked: flow=%s study_id=%s",
+        flow,
+        raw_state.get("study_id"),
+    )
 
     # Inject the flow into state so the router can branch correctly
-    state: StudyState = {**raw_state, "current_flow": flow}  # type: ignore[assignment]
+    state: StudyState = {**raw_state, "current_flow": flow}  # type: ignore[assignment, typeddict-item]
 
     graph = build_graph()
     result: StudyState = graph.invoke(state)
