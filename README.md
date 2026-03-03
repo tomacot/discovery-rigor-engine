@@ -107,29 +107,26 @@ cdk deploy      # prints the public URL on completion
 
 The system is built on a **LangGraph StateGraph** with three sub-flows branching from an entry router. Each sub-flow chains LLM reasoning nodes with deterministic validation and scoring nodes.
 
-<!-- TODO: Replace with rendered architecture diagram -->
 ```
 Entry Router (deterministic)
-    ├── Assumption Mapping Flow
+    ├── Assumption Mapping — phase 1
     │     decompose_hypothesis (LLM — includes estimated scores + rationales)
-    │     → categorise_risk_lens (LLM)
-    │     → interactive_rating (human-in-the-loop via Streamlit)
-    │     → compute_risk_scores (deterministic)
-    │     → generate_research_questions (LLM, all assumptions)
-    │     → output_assumption_map (deterministic render)
-    │
-    ├── Script Review Flow
+    │     → categorise_risk_lens (LLM) → END
+    │     [user rates assumptions in Streamlit, then triggers phase 2]
+    ├── Assumption Mapping — phase 2
+    │     compute_risk_scores (deterministic)
+    │     → generate_research_questions (LLM, all assumptions) → END
+    ├── Script Review
     │     parse_questions (deterministic)
     │     → analyse_bias (LLM, per question)
-    │     → generate_rewrites (LLM, flagged questions only)
-    │     → assemble_clean_script (deterministic)
-    │
-    └── Synthesis Flow
+    │     → rewrite_questions (LLM, flagged questions only)
+    │     → assemble_clean_script (deterministic) → END
+    └── Synthesis
           ingest_notes (deterministic)
           → open_coding (LLM, per session)
           → axial_coding (LLM, all observations)
           → selective_coding (LLM, themes → insights)
-          → decision_record (LLM narrative + deterministic scoring)
+          → decision_record_node (LLM narrative + deterministic scoring) → END
 ```
 
 **Design principle: LLM for reasoning, deterministic for rigour.** The LLM handles tasks requiring judgment — decomposing hypotheses, detecting bias patterns, clustering observations, generating narratives. Deterministic logic handles everything where consistency matters — risk score calculations, the 2-session minimum for themes, confidence score computation, and traceability chain validation. This means the guardrails and quality controls are reproducible and auditable, not dependent on LLM mood.
@@ -191,7 +188,7 @@ These are the deliberate scoping trade-offs. They're the section of this README 
 | Decision | Rationale |
 |---------|-----------|
 | **No persistent database** | Adds setup friction without demo value. Revisit for the research repository feature in v2. |
-| **No file upload** | Text input keeps scope tight. File parsing (docx, PDF, audio transcription) is a v2 feature. |
+| **No .docx / PDF / audio upload** | `.txt` transcript upload was added in v1.1 (Synthesis page). Richer formats (docx, PDF, audio transcription) remain a v2 feature. |
 | **No real-time interview companion** | Architecturally different (streaming, WebSocket, voice). The MVP handles before-interview (script review) and after-interview (synthesis), not during. |
 | **No ethics/consent workflow** | Critical for production but adds complexity without demo impact. |
 | **No multi-user / team features** | Weekend scope. The tool models a single PM's workflow. |
