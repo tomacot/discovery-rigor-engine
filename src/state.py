@@ -66,6 +66,7 @@ class Session:
     study_id: str
     participant_id: str  # Anonymised: P1, P2, etc.
     raw_notes: str
+    summary: str = ""  # 3-4 sentence pre-baked summary shown before synthesis
 
 
 @dataclass

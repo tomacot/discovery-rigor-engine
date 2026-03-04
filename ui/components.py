@@ -187,3 +187,28 @@ def render_evidence_chain(
                                                 "\n\n_[truncated — 800 chars shown]_"
                                             )
                                         st.text(excerpt)
+
+
+def render_progress_tracker(state) -> None:
+    """Show workflow completion status in the sidebar.
+
+    Three steps mirror the three capabilities. Each step is ticked once
+    its primary output exists in state — deterministic, no LLM needed.
+    """
+    if not state:
+        return
+
+    scripts = state.get("scripts", [])
+    script_reviewed = bool(scripts and any(s.questions for s in scripts))
+
+    steps = [
+        ("Assumption Map", bool(state.get("assumption_map_complete"))),
+        ("Script Review", script_reviewed),
+        ("Synthesis", bool(state.get("decision_record"))),
+    ]
+
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("**Workflow progress**")
+    for label, done in steps:
+        icon = "✅" if done else "⬜"
+        st.sidebar.markdown(f"{icon} {label}")

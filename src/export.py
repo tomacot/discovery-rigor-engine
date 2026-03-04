@@ -4,8 +4,8 @@ Export helpers — format study data as Markdown documents for download.
 format_decision_record_md(state) — full decision record with all insights, themes,
   confidence breakdown, and tiered next steps. Used by ui/synthesis.py.
 
-format_research_script_md(state) — research question guide with all assumptions
-  grouped by risk lens plus 5 general supplementary questions.
+format_research_script_md(state) — 7-section interview guide with assumptions slotted
+  by risk lens, inline interviewer tips, and timing estimates.
   Used by ui/assumption_map.py.
 
 Design: pure functions, no Streamlit imports, no LLM calls. The output is a
@@ -177,80 +177,204 @@ def format_decision_record_md(state: StudyState) -> str:
 
 
 def format_research_script_md(state: StudyState) -> str:
-    """Format all assumptions with research questions as a Markdown guide for download."""
+    """Format all assumptions as a 7-section interview guide for download.
+
+    Sections map assumptions to research methodology phases:
+      Sections 1-2: Fixed setup and workflow grounding (no assumptions)
+      Section 3: Desirability assumptions — problem validation
+      Section 4: Usability assumptions — friction and workarounds
+      Section 5: Concept fit — viability + feasibility assumptions
+      Sections 6-7: Fixed prioritisation and wrap-up (no assumptions)
+
+    Assumptions within each section are sorted by risk_score descending so the
+    most critical questions come first.
+    """
     today = date.today().isoformat()
     study_id = state["study_id"]
     hypothesis = state["hypothesis"]
     assumptions = state["assumptions"]
+    session_count = len(state.get("sessions", []))
 
-    lines: list[str] = [
-        f"# Research Script: {study_id}",
-        f"**Date:** {today}",
-        "",
-        "## Research Hypothesis",
-        hypothesis,
-        "",
-        "---",
-        "",
-        "## Research Questions by Risk Lens",
-        "",
-    ]
-
-    lens_order = ["desirability", "viability", "usability", "feasibility"]
-    by_lens: dict[str, list] = {lens: [] for lens in lens_order}
-    other: list = []
+    # Bucket assumptions by risk lens, sorted by risk score descending
+    by_lens: dict[str, list] = {
+        "desirability": [],
+        "usability": [],
+        "viability": [],
+        "feasibility": [],
+    }
     for a in sorted(assumptions, key=lambda x: x.risk_score, reverse=True):
         if a.risk_lens in by_lens:
             by_lens[a.risk_lens].append(a)
-        else:
-            other.append(a)
 
-    for lens in lens_order:
-        group = by_lens[lens]
-        if not group:
-            continue
-        lines += [f"### {lens.capitalize()} Assumptions", ""]
-        for a in group:
-            risk_tag = (
-                "HIGH RISK"
-                if a.risk_score >= 20
-                else "MEDIUM RISK"
-                if a.risk_score >= 12
-                else "LOW RISK"
-            )
-            lines += [
-                f"**{a.statement}**  ",
-                f"_Risk: `{risk_tag}` (score {a.risk_score:.0f}) · "
-                f"Importance {a.importance}/5 · Evidence {a.evidence_level}/5_",
-            ]
-            if a.research_question:
-                lines += ["", f"Research question: _{a.research_question}_"]
-            lines.append("")
+    def _assumption_block(a) -> list[str]:
+        """Format one assumption as a research question block."""
+        risk_tag = (
+            "HIGH RISK"
+            if a.risk_score >= 20
+            else "MEDIUM RISK"
+            if a.risk_score >= 12
+            else "LOW RISK"
+        )
+        block = [
+            f"**Assumption:** {a.statement}  ",
+            f"_Risk: `{risk_tag}` (score {a.risk_score:.0f}) · "
+            f"Importance {a.importance}/5 · Evidence {a.evidence_level}/5_",
+        ]
+        if a.research_question:
+            block += ["", f"**Ask:** _{a.research_question}_"]
+        block.append("")
+        return block
 
-    if other:
-        lines += ["### Other Assumptions", ""]
-        for a in other:
-            lines.append(f"- **{a.statement}**")
-            if a.research_question:
-                lines.append(f"  _{a.research_question}_")
-        lines.append("")
+    lines: list[str] = [
+        f"# Interview Guide: {study_id}",
+        f"**Date:** {today}  |  "
+        f"**Duration:** 60–90 min  |  "
+        f"**Sessions completed:** {session_count}",
+        "",
+        "## Research Hypothesis",
+        f"_{hypothesis}_",
+        "",
+        "---",
+        "",
+        # ── Section 1: Intro & Setup ──────────────────────────────────────────
+        "## Section 1: Intro & Setup (~5 min)",
+        "",
+        "> **Interviewer note:** Introduce yourself and the research purpose. "
+        "Make clear you are studying the problem space, not testing a solution. "
+        "Obtain recording consent before starting.",
+        "",
+        "- \"Thanks for making the time. We're doing research to understand [topic area] — "
+        "specifically the workflows and pain points your team deals with. "
+        "I'll be asking about your experience, not evaluating any product. "
+        'Is it OK if I record this for note-taking purposes?"',
+        '- "Can you briefly describe your role and what a typical week looks like for you?"',
+        '- "How long have you been in this role, and what did you do before?"',
+        "",
+        "---",
+        "",
+        # ── Section 2: Workflow Grounding ─────────────────────────────────────
+        "## Section 2: Workflow Grounding (~10 min)",
+        "",
+        "> **Interviewer note:** Establish current-state before probing pain. "
+        "Listen for tools, handoffs, time sinks, and who else is involved. "
+        "Do not assume any particular workflow — let them show you theirs.",
+        "",
+        '- "Walk me through how you currently handle [workflow area]. '
+        'Start from the beginning of a typical cycle."',
+        '- "What tools are involved at each stage?"',
+        '- "Where do handoffs happen — who else touches this process?"',
+        '- "Which part of this takes the most time or causes the most friction?"',
+        "",
+        "---",
+        "",
+        # ── Section 3: Desirability ───────────────────────────────────────────
+        "## Section 3: Desirability — Problem Validation (~15 min)",
+        "",
+        "> **Interviewer note:** Stay in past behaviour — ask about specific "
+        "incidents, not general opinions. "
+        'Use "tell me about the last time" rather than hypotheticals. '
+        "If they give a vague answer, probe: "
+        '"Can you walk me through a specific example of that?"',
+        "",
+    ]
+
+    if by_lens["desirability"]:
+        for a in by_lens["desirability"]:
+            lines += _assumption_block(a)
+    else:
+        lines += [
+            '- "Tell me about the last time [problem area] caused a real issue for your team. '
+            'What happened?"',
+            '- "How often does this come up, and what\'s the downstream impact when it does?"',
+            "",
+        ]
 
     lines += [
         "---",
         "",
-        "## Supplementary Interview Questions",
-        "_These general questions apply across any discovery interview:_",
+        # ── Section 4: Usability ──────────────────────────────────────────────
+        "## Section 4: Friction & Workarounds (~10 min)",
         "",
-        "1. Walk me through a typical week in your role — what takes up most of your time?",
-        "2. What tools do you use every day, and which ones do you find yourself working around rather than with?",
-        "3. Tell me about the last time something in your workflow felt genuinely broken. What happened?",
-        "4. If you could change one thing about how your team makes decisions about where to invest, what would it be?",
-        "5. What would have to be true for you to trust a new tool enough to make it part of your standard process?",
+        "> **Interviewer note:** Probe for workarounds — they reveal unmet needs more "
+        "reliably than stated preferences. "
+        "Don't accept \"it's fine\" — ask what they do when it isn't. "
+        "Time spent on workarounds is a proxy for pain severity.",
+        "",
+    ]
+
+    if by_lens["usability"]:
+        for a in by_lens["usability"]:
+            lines += _assumption_block(a)
+    else:
+        lines += [
+            '- "What do you do when [problem] happens — what\'s your workaround?"',
+            '- "How much time per week does that workaround take?"',
+            "",
+        ]
+
+    lines += [
+        '- "What would you have to stop doing if you had to reduce time spent on this by half?"',
+        "",
+        "---",
+        "",
+        # ── Section 5: Concept Fit ────────────────────────────────────────────
+        "## Section 5: Concept Fit (~10 min)",
+        "",
+        "> **Interviewer note:** This section tests viability and feasibility — "
+        "budget authority, integration constraints, and strategic fit. "
+        "Focus on constraints and decision-making process, not feature preferences. "
+        "Do not pitch a solution; probe whether the space is investable.",
+        "",
+    ]
+
+    for a in by_lens["viability"] + by_lens["feasibility"]:
+        lines += _assumption_block(a)
+
+    if not by_lens["viability"] and not by_lens["feasibility"]:
+        lines += [
+            '- "Who owns the budget for tooling in this space? '
+            'What would it take to get a new solution approved?"',
+            '- "What does your current vendor contract situation look like — '
+            'are you locked in anywhere?"',
+            "",
+        ]
+
+    lines += [
+        "---",
+        "",
+        # ── Section 6: Prioritisation ─────────────────────────────────────────
+        "## Section 6: Prioritisation (~5 min)",
+        "",
+        "> **Interviewer note:** Force-rank to distinguish real priorities from "
+        "polite agreement. "
+        "Most participants will say everything matters — push them to choose.",
+        "",
+        "- \"Of all the challenges we've discussed today, which is the single most "
+        'important one to solve for your team right now?"',
+        '- "If you could fix one thing in your workflow tomorrow — just one — what would it be?"',
+        '- "What would success look like 6 months from now if this problem were solved?"',
+        "",
+        "---",
+        "",
+        # ── Section 7: Wrap-Up ────────────────────────────────────────────────
+        "## Section 7: Wrap-Up (~5 min)",
+        "",
+        "> **Interviewer note:** Leave space for surprises — the most important "
+        "insight sometimes comes in the last two minutes. "
+        "Always ask for referrals; a warm introduction to a peer takes 10 seconds "
+        "and can unlock your next interview.",
+        "",
+        '- "Is there anything important we haven\'t covered that you think I should know?"',
+        '- "Is there anyone else on your team — or someone you know at another company — '
+        'who deals with these challenges? Could you introduce us?"',
+        "- \"What's the one thing you'd want a product team to understand about your "
+        "day-to-day that most people outside your role don't get?\"",
         "",
         "---",
         "",
         "_Generated by Discovery Rigor Engine_",
     ]
+
     return "\n".join(lines)
 
 

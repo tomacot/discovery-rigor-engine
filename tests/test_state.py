@@ -115,10 +115,10 @@ class TestLoadFixture:
         state = store.load_fixture("adtech_study")
         assert len(state["assumptions"]) == 10
 
-    def test_fixture_has_five_sessions(self):
+    def test_fixture_has_ten_sessions(self):
         store = StudyStore()
         state = store.load_fixture("adtech_study")
-        assert len(state["sessions"]) == 5
+        assert len(state["sessions"]) == 10
 
     def test_fixture_has_script(self):
         store = StudyStore()
@@ -194,6 +194,12 @@ class TestDomainDataclasses:
         )
         assert s.participant_id == "P1"
         assert s.raw_notes == "Notes"
+
+    def test_session_summary_defaults_empty(self):
+        s = Session(
+            id="ses1", study_id="study-1", participant_id="P1", raw_notes="Notes"
+        )
+        assert s.summary == ""
 
     def test_theme_defaults(self):
         t = Theme(id="t1", study_id="s1", label="Theme A", description="desc")

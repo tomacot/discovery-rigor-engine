@@ -123,6 +123,7 @@ class StudyStore:
                 study_id=ses["study_id"],
                 participant_id=ses["participant_id"],
                 raw_notes=ses["raw_notes"],
+                summary=ses.get("summary", ""),
             )
             for ses in data.get("sessions", [])
         ]
@@ -174,6 +175,7 @@ class StudyStore:
                 study_id=ses.get("study_id", study_id),
                 participant_id=ses["participant_id"],
                 raw_notes=ses["raw_notes"],
+                summary=ses.get("summary", ""),
             )
             for ses in data.get("sessions", [])
         ]

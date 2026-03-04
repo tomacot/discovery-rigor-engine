@@ -48,6 +48,24 @@ def _extract_participant_id(filename: str) -> str:
     return stem
 
 
+def _read_transcript(file) -> str:
+    """Extract plain text from a .txt, .pdf, or .docx upload."""
+    name = file.name.lower()
+    if name.endswith(".txt"):
+        return file.read().decode("utf-8").strip()
+    elif name.endswith(".pdf"):
+        import pdfplumber
+
+        with pdfplumber.open(file) as pdf:
+            return "\n".join(page.extract_text() or "" for page in pdf.pages).strip()
+    elif name.endswith(".docx"):
+        from docx import Document
+
+        doc = Document(file)
+        return "\n".join(p.text for p in doc.paragraphs if p.text.strip()).strip()
+    return ""
+
+
 def _require_study() -> StudyState | None:
     """Return current state or show an error if no study is loaded."""
     state = st.session_state.get("current_state")
@@ -147,19 +165,31 @@ def render() -> None:
                     label_visibility="collapsed",
                     key=f"notes_display_{s.id}",
                 )
+
+        # Session summaries — shown when fixture provides pre-baked summaries (3F)
+        sessions_with_summaries = [s for s in state["sessions"] if s.summary]
+        if sessions_with_summaries:
+            st.markdown("**Session summaries**")
+            st.caption(
+                "Pre-baked context per participant — useful for reviewing before synthesis."
+            )
+            for s in sessions_with_summaries:
+                with st.expander(f"{s.participant_id} — {s.id}", expanded=False):
+                    st.markdown(s.summary)
+
     else:
         st.info("No sessions loaded. Add at least 2 sessions before running synthesis.")
 
     # Upload transcript files
-    with st.expander("Upload transcript files (.txt)", expanded=False):
+    with st.expander("Upload transcript files (.txt, .pdf, .docx)", expanded=False):
         st.caption(
-            "Upload one .txt file per participant. Name files P1.txt, P2.txt, etc. "
+            "Upload one file per participant. Name files P1.txt, P2.pdf, etc. "
             "for automatic participant ID detection — or any filename works and you can "
-            "rename the ID before importing."
+            "rename the ID before importing. Supported formats: .txt, .pdf, .docx."
         )
         uploaded_files = st.file_uploader(
             "Transcripts",
-            type=["txt"],
+            type=["txt", "pdf", "docx"],
             accept_multiple_files=True,
             label_visibility="collapsed",
             key="transcript_uploader",
@@ -169,7 +199,7 @@ def render() -> None:
                 {
                     "File": f.name,
                     "Detected participant ID": _extract_participant_id(f.name),
-                    "Characters": f"{f.size:,}",
+                    "Size": f"{f.size:,} bytes",
                 }
                 for f in uploaded_files
             ]
@@ -179,14 +209,16 @@ def render() -> None:
             ):
                 new_sessions = []
                 for f in uploaded_files:
-                    new_sessions.append(
-                        Session(
-                            id=f"session-{uuid.uuid4().hex[:8]}",
-                            study_id=state["study_id"],
-                            participant_id=_extract_participant_id(f.name),
-                            raw_notes=f.read().decode("utf-8").strip(),
+                    text = _read_transcript(f)
+                    if text:
+                        new_sessions.append(
+                            Session(
+                                id=f"session-{uuid.uuid4().hex[:8]}",
+                                study_id=state["study_id"],
+                                participant_id=_extract_participant_id(f.name),
+                                raw_notes=text,
+                            )
                         )
-                    )
                 state["sessions"] = [*state["sessions"], *new_sessions]
                 st.session_state.current_state = state
                 st.rerun()

@@ -25,6 +25,11 @@ page = st.sidebar.radio(
     key="sidebar_nav",
 )
 
+# Progress tracker — shows after a study is loaded
+from ui.components import render_progress_tracker
+
+render_progress_tracker(st.session_state.get("current_state"))
+
 # Route to the selected page
 if page == "Home":
     from ui.home import render

@@ -47,7 +47,7 @@ Paste your discussion guide. The agent analyses every question against a bias ta
 
 ### 3. Structured Synthesis with Decision Traceability
 
-Provide your raw interview notes — by pasting text, uploading `.txt` transcript files, or loading a pre-built fixture. The agent guides them through a rigorous coding process:
+Provide your raw interview notes — by pasting text, uploading `.txt`, `.pdf`, or `.docx` transcript files (participant ID auto-detected from filename), or loading a pre-built fixture. The agent guides them through a rigorous coding process:
 
 - **Open coding** — Extracts discrete observations from each session, tagged as behaviour, statement, or context. Observations are explicitly separated from interpretation.
 - **Axial coding** — Clusters observations into themes. Each theme requires support from at least 2 sessions (no single-source themes) and includes a mandatory counterevidence field.
@@ -70,7 +70,7 @@ The full synthesis is exportable as a Markdown decision record. The result: a st
 
 ![Home page — choose from six pre-built AdTech sample studies, create a new study from a hypothesis, or upload your own JSON](docs/screenshots/01-home.png)
 
-The tool comes pre-loaded with **six adtech sample studies** covering creative asset management, audience segmentation, attribution modelling, campaign pacing, creative testing at scale, and cross-channel frequency management. Each includes a hypothesis, 8–10 pre-rated assumptions, a deliberately biased interview script, and 5 mock interview sessions with varied perspectives (including sceptical participants). You can explore the full workflow without entering any data.
+The tool comes pre-loaded with **six adtech sample studies** covering creative asset management, audience segmentation, attribution modelling, campaign pacing, creative testing at scale, and cross-channel frequency management. Each includes a hypothesis, 8–10 pre-rated assumptions, a deliberately biased interview script, and **10 mock interview sessions** with varied perspectives — including enterprise buyers, recent churners, finance/procurement stakeholders, international participants, and power users who've built custom tooling. Each session includes a pre-baked 3–4 sentence summary visible on the Synthesis page. You can explore the full workflow without entering any data.
 
 ### Run locally
 
@@ -164,7 +164,7 @@ Using the pre-loaded adtech fixture:
 1. **Load a sample study** — Choose from 6 pre-built studies on the home page, or upload your own JSON. "Creative Asset Optimisation for Mid-Market Advertisers" is the primary fixture.
 2. **Explore the assumption map** — 10 assumptions across desirability, usability, feasibility, and viability. Sliders start at LLM-estimated scores with rationale captions underneath. Research questions are generated for every assumption. Download the full map as a Markdown research guide.
 3. **Review the biased script** — The sample discussion guide contains 6 deliberately problematic questions alongside 4 clean ones. Load one of 5 example scripts from the dropdown, or paste your own. Watch the agent flag leading questions, hypotheticals, and solution-selling patterns, then generate de-biased rewrites.
-4. **Run synthesis** — Add sessions by pasting notes, uploading `.txt` transcripts (named `P1.txt`, `P2.txt` etc. for auto-detection), or use the pre-loaded 5 sessions. Watch node-level progress in a live status panel. Themes emerge with supporting and counterevidence.
+4. **Run synthesis** — Add sessions by pasting notes, uploading `.txt`, `.pdf`, or `.docx` transcripts (named `P1.txt`, `P2.pdf` etc. for auto-detection), or use the pre-loaded 10 sessions. Session summaries are shown above the form so you can review participant context before running. Watch node-level progress in a live status panel. Themes emerge with supporting and counterevidence.
 5. **Read the decision record** — A structured recommendation with confidence score, tiered next steps, what NOT to do, segment insights, and contradictions. Explore the Insights tab for rich insight cards with participant quotes, frequency counts, workaround patterns, and solution directions. Click through the Evidence Chain tab to trace any claim back through themes → observations → raw session notes.
 6. **Export** — Download the full decision record or research script as Markdown.
 
@@ -188,7 +188,7 @@ These are the deliberate scoping trade-offs. They're the section of this README 
 | Decision | Rationale |
 |---------|-----------|
 | **No persistent database** | Adds setup friction without demo value. Revisit for the research repository feature in v2. |
-| **No .docx / PDF / audio upload** | `.txt` transcript upload was added in v1.1 (Synthesis page). Richer formats (docx, PDF, audio transcription) remain a v2 feature. |
+| **No audio transcription** | `.txt`, `.pdf`, and `.docx` transcript uploads ship in v1.3 (Synthesis page). Audio transcription remains a v2 feature. |
 | **No real-time interview companion** | Architecturally different (streaming, WebSocket, voice). The MVP handles before-interview (script review) and after-interview (synthesis), not during. |
 | **No ethics/consent workflow** | Critical for production but adds complexity without demo impact. |
 | **No multi-user / team features** | Weekend scope. The tool models a single PM's workflow. |
@@ -211,7 +211,7 @@ These are the deliberate scoping trade-offs. They're the section of this README 
 | **Research Repository** | Persistent storage with tagging taxonomy. Duplicate-detection alerts when a new study overlaps with existing research. |
 | **Method Recommender** | Given a decision type and risk lens, recommend optimal research methods from the full taxonomy (contextual inquiry, diary studies, usability tests, surveys, A/B tests) with sample size heuristics. |
 | **Ethics & Consent Module** | GDPR-aware consent script generator, data minimisation checklist, special category data warnings. |
-| **File Upload & Transcription** | Accept .docx, .pdf, and audio files as session inputs. |
+| **Audio Transcription** | Accept audio files as session inputs (`.txt`, `.pdf`, `.docx` already supported in v1.3). |
 
 ### v3 — Team & Integration
 
