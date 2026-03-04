@@ -176,7 +176,8 @@ def render() -> None:
 
     st.divider()
     st.info(
-        "**Next step:** Review your interview script for bias before going into the field."
+        "**Next step:** Review your research questions for bias before going into "
+        "the field. Your assumption map questions will be pre-loaded into Script Review."
     )
     if st.button("Go to Script Review →", key="nav_assumption_to_script"):
         st.session_state["sidebar_nav"] = "Script Review"

@@ -173,7 +173,9 @@ def render() -> None:
         st.info("No sessions loaded. Add at least 2 sessions before running synthesis.")
 
     # Upload transcript files
-    with st.expander("Upload transcript files (.txt, .pdf, .docx)", expanded=False):
+    with st.expander(
+        "Upload transcript files (.txt, .pdf, .docx)", expanded=not state["sessions"]
+    ):
         st.caption(
             "Upload one file per participant. Name files P1.txt, P2.pdf, etc. "
             "for automatic participant ID detection — or any filename works and you can "

@@ -14,7 +14,9 @@ import uuid
 import streamlit as st
 
 from src.graph import build_graph
+from src.state import Session
 from src.store import get_store
+from ui.synthesis import _extract_participant_id, _read_transcript
 
 SAMPLE_STUDIES = {
     "Creative Asset Optimisation (AdTech)": "adtech_study",
@@ -104,51 +106,87 @@ def render() -> None:
     with col2:
         st.markdown("### Upload Your Own Study")
         st.markdown(
-            "Upload a `.json` file to load your own study data. "
-            "Minimum required fields: `study_id`, `hypothesis`, and at least 2 `sessions`."
+            "Upload a `.json` study export, or drop in a `.txt`, `.pdf`, or `.docx` "
+            "transcript file to start a new study from your own notes."
         )
         uploaded_file = st.file_uploader(
-            "Upload study JSON",
-            type=["json"],
+            "Upload study file",
+            type=["json", "txt", "pdf", "docx"],
             label_visibility="collapsed",
         )
         if uploaded_file is not None:
-            try:
-                data = json.loads(uploaded_file.read())
-                store = st.session_state.store
-                state = store.load_from_dict(data)
-                st.session_state.current_state = state
-                st.success(
-                    f"Uploaded **{state['study_id']}** — "
-                    f"{len(state['assumptions'])} assumptions, {len(state['sessions'])} sessions."
-                )
-                st.info(
-                    "Navigate to Assumption Map, Script Review, or Synthesis in the sidebar."
-                )
-            except (json.JSONDecodeError, KeyError) as e:
-                st.error(f"Could not parse JSON file: {e}")
+            fname = uploaded_file.name.lower()
 
-        with st.expander("Expected JSON format", expanded=False):
-            st.code(
-                """{
-  "study_id": "my-study-slug",
-  "hypothesis": "We believe...",
-  "sessions": [
-    {
-      "id": "SES1",
-      "study_id": "my-study-slug",
-      "participant_id": "P1",
-      "raw_notes": "Notes from the session..."
-    }
-  ],
-  "assumptions": [],
-  "scripts": []
-}""",
-                language="json",
-            )
+            if fname.endswith(".json"):
+                try:
+                    data = json.loads(uploaded_file.read())
+                    store = st.session_state.store
+                    state = store.load_from_dict(data)
+                    st.session_state.current_state = state
+                    st.success(
+                        f"Uploaded **{state['study_id']}** — "
+                        f"{len(state['assumptions'])} assumptions, {len(state['sessions'])} sessions."
+                    )
+                    st.info(
+                        "Navigate to Assumption Map, Script Review, or Synthesis in the sidebar."
+                    )
+                except (json.JSONDecodeError, KeyError) as e:
+                    st.error(f"Could not parse JSON file: {e}")
+
+            else:
+                # .txt / .pdf / .docx — extract text, prompt for hypothesis
+                text = _read_transcript(uploaded_file)
+                if not text:
+                    st.error(
+                        "Could not extract text from that file. Try saving it as plain .txt."
+                    )
+                else:
+                    st.success(
+                        f"Extracted {len(text):,} characters from **{uploaded_file.name}**."
+                    )
+                    hypothesis_input = st.text_input(
+                        "Enter your research hypothesis",
+                        placeholder="We believe that [user] struggle with [problem] because [reason]...",
+                        help="Required to create a study. You can refine this in the Assumption Map.",
+                        key="upload_hypothesis",
+                    )
+                    if st.button(
+                        "Create Study from Notes",
+                        type="primary",
+                        use_container_width=True,
+                    ):
+                        if not hypothesis_input.strip():
+                            st.warning(
+                                "Please enter a hypothesis before creating the study."
+                            )
+                        else:
+                            store = st.session_state.store
+                            study_id = f"study-{uuid.uuid4().hex[:8]}"
+                            state = store.create_study(
+                                study_id, hypothesis_input.strip()
+                            )
+                            participant_id = _extract_participant_id(uploaded_file.name)
+                            state["sessions"] = [
+                                Session(
+                                    id=f"session-{uuid.uuid4().hex[:8]}",
+                                    study_id=study_id,
+                                    participant_id=participant_id,
+                                    raw_notes=text,
+                                )
+                            ]
+                            st.session_state.current_state = state
+                            st.success(
+                                f"Created study `{study_id}` with 1 session "
+                                f"({participant_id}). Add more sessions on the Synthesis page."
+                            )
+                            st.info(
+                                "Start with **Assumption Map** to map your risks, or go "
+                                "straight to **Synthesis** to add more sessions."
+                            )
+
         st.caption(
-            "Tip: `assumptions` and `scripts` are optional — the tool generates these for you. "
-            "Minimum 2 sessions are required for synthesis."
+            "JSON: full study export with hypothesis + assumptions + sessions.  \n"
+            "TXT / PDF / DOCX: your interview notes — you'll enter the hypothesis above."
         )
 
     # ── Currently loaded study summary ────────────────────────────────────────

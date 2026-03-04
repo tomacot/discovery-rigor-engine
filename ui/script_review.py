@@ -91,6 +91,28 @@ EXAMPLE_SCRIPTS: dict[str, str] = {
     "Creative Testing Habits": _CREATIVE_TESTING_SCRIPT,
 }
 
+_LOAD_FROM_MAP = "From My Assumption Map"
+
+
+def _build_assumption_script(state) -> str:
+    """Numbered question list from assumption.research_question, sorted by risk_score desc.
+
+    Extracts only assumptions that have a non-empty research_question. Returns a
+    plain numbered string compatible with the bias analyser's parse_questions node.
+    Returns "" if no state is loaded or no research questions have been generated.
+    """
+    if not state:
+        return ""
+    assumptions = [
+        a for a in state.get("assumptions", []) if a.research_question.strip()
+    ]
+    if not assumptions:
+        return ""
+    sorted_assumptions = sorted(assumptions, key=lambda a: a.risk_score, reverse=True)
+    return "\n".join(
+        f"{i}. {a.research_question}" for i, a in enumerate(sorted_assumptions, 1)
+    )
+
 
 def _require_study() -> StudyState | None:
     """Return current state or show an error if no study is loaded."""
@@ -158,14 +180,22 @@ def render() -> None:
         "probes. The tool will strip formatting and analyse each question individually."
     )
 
+    selector_options = [_LOAD_FROM_MAP, *EXAMPLE_SCRIPTS.keys()]
     selected_example = st.selectbox(
-        "Load an example script to explore the tool",
-        list(EXAMPLE_SCRIPTS.keys()),
+        "Load a script to review",
+        selector_options,
     )
-    example_text = EXAMPLE_SCRIPTS[selected_example]
+    example_text = EXAMPLE_SCRIPTS.get(selected_example, "")
 
-    # Pre-fill from example, or from existing script, or leave blank
-    if example_text:
+    # Pre-fill: assumption map questions → example → existing script → blank
+    if selected_example == _LOAD_FROM_MAP:
+        default_text = _build_assumption_script(st.session_state.get("current_state"))
+        if not default_text:
+            st.info(
+                "No research questions found. Run the Assumption Map first to "
+                "generate questions, then come back to review them for bias."
+            )
+    elif example_text:
         default_text = example_text
     elif script:
         default_text = script.raw_text

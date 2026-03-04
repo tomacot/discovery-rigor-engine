@@ -1,0 +1,30 @@
+P1: Senior Performance Marketing Manager, e-commerce brand, ~180 employees. Manages Meta, Google Display, and programmatic campaigns in-house.
+
+WORKFLOW & TOOLS
+- Team of 3 managing creative across 6 active campaigns at any given time
+- Uses Canva for quick resizes, sends briefs to a freelance designer for hero assets
+- "We have a master creative brief template but honestly it gets ignored half the time — everyone just grabs last quarter's assets and tweaks the headline"
+- No dedicated creative project management tool; tracks asset versions in a shared Google Drive folder with naming conventions like "v3_final_FINAL"
+- Creative approval loop involves marketing director and legal; typically takes 3–5 days for new creative, 1–2 days for iterations
+
+PAIN POINTS
+- Biggest frustration: resizing for placements. "I probably spend 4-5 hours a week just checking that the right size ended up in the right placement. It sounds ridiculous but we've launched campaigns with 9:16 assets in a 1:1 slot and only noticed when a colleague pointed it out"
+- Unclear ownership of creative performance data. "Metrics live in Meta, metrics live in DV360, and nobody has a single view of which creative concept is actually working across all placements. We make gut calls."
+- No systematic process for retiring underperforming creative. "We keep running ads that we know aren't working because replacing them is a project in itself"
+- Ad fatigue is a known problem but hard to act on. "I know our frequency is probably too high on retargeting but I don't have the bandwidth to set up the rules to cap it per user across platforms"
+
+WORKAROUNDS
+- Maintains a spreadsheet of active creative assets and their placements — updated manually after every campaign change
+- Does informal creative reviews in Slack by screenshotting live ads
+- Uses UTM parameters religiously to track performance by creative concept in GA4, then manually cross-references with platform data
+
+WHAT GOOD LOOKS LIKE
+- "If I could see which creative concept is performing best across all my placements in one view, that would save me hours every week"
+- Would value automated alerts when creative performance drops below a threshold
+- Not interested in AI-generated creative: "Our brand has a very specific tone. I don't trust AI to get it right. I need a human in the loop for copy."
+- Open to automation for resizing and trafficking, not for creative strategy
+
+BUDGET & DECISION AUTHORITY
+- Has budget authority up to ~£5k/month on tools without director sign-off
+- Previous tool purchases: a social scheduling tool (£200/month) and a reporting dashboard (£400/month)
+- Sceptical of enterprise pricing: "The big creative management platforms are priced for agencies. I'm not paying £3k/month for something we'd use 20% of"
