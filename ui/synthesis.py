@@ -157,6 +157,9 @@ def render() -> None:
         st.markdown(f"**{len(state['sessions'])} session(s) loaded:**")
         for s in state["sessions"]:
             with st.expander(f"{s.participant_id} — {s.id}", expanded=False):
+                if s.summary:
+                    st.caption(s.summary)
+                    st.divider()
                 st.text_area(
                     "Notes",
                     value=s.raw_notes,
@@ -165,17 +168,6 @@ def render() -> None:
                     label_visibility="collapsed",
                     key=f"notes_display_{s.id}",
                 )
-
-        # Session summaries — shown when fixture provides pre-baked summaries (3F)
-        sessions_with_summaries = [s for s in state["sessions"] if s.summary]
-        if sessions_with_summaries:
-            st.markdown("**Session summaries**")
-            st.caption(
-                "Pre-baked context per participant — useful for reviewing before synthesis."
-            )
-            for s in sessions_with_summaries:
-                with st.expander(f"{s.participant_id} — {s.id}", expanded=False):
-                    st.markdown(s.summary)
 
     else:
         st.info("No sessions loaded. Add at least 2 sessions before running synthesis.")
